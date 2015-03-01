@@ -1,27 +1,18 @@
-Uni - data access tool for .NET
-===============================
+##How To Install It?
+Drop UniOrm C#.NET code file into your project and change it as you wish or you can install from NuGet Galery;
 
-A simple data access tool for .Net
-You can read main article from http://kenanhancer.com/uni/
-and you can also read article for MySql database from http://www.kenanhancer.com/uni-mysql-a-simple-data-access-tool-for-dot-net/
-
-How To Install It?
-------------------
-Drop Uni C#.NET code file into your project and change it as you wish or you can install from NuGet Galery;
-
-You should write Package Manager Console below code and Uni will be installed automatically.
-```csharp
+If you want to install from Nuget, you should write Package Manager Console below code and Uni.ORM will be installed automatically.
+```
 Install-Package Uni
 ```
-By the way, you can also reach Uni NuGet package from http://nuget.org/packages/Uni address.
+By the way, you can also reach Uni.ORM NuGet package from `http://nuget.org/packages/Uni` address.
 
-How Do You Use It?
-------------------
+##How Do You Use It?
 Let's say that you installed database connectors in your machine.
-Your project doesn't need any DLL in references. Uni will find DLL which is necessary from the GAC.
+Your project doesn't need any DLL in references. Uni.ORM will find DLL which is necessary from the GAC.
 
-Let's have a look at config file for connectionStrings which will be used by Uni.
-```csharp
+Let's have a look at config file for connectionStrings which will be used by Uni.ORM.
+```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <connectionStrings>
@@ -31,41 +22,40 @@ Let's have a look at config file for connectionStrings which will be used by Uni
   </connectionStrings>
 </configuration>
 ```
-Uni can understand database that you want to use with providerName attribute in connectionString.
+Uni.ORM can understand database that you want to use with providerName attribute in connectionString.
 Let's say we want to use Oracle database. We should set providerName as "Oracle.DataAccess.Client" as shown in config code.
 
-We can create Uni object now.
+We can create UniOrm object now.
 ```csharp
-var aw = new Uni("AdventureWorks");//Microsoft SQL Server
-var hr = new Uni("HR");//Oracle
-var sakila = new Uni("Sakila");//MySQL
+var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
+var hr = new UniOrm("HR");//Oracle
+var sakila = new UniOrm("Sakila");//MySQL
 ```
 
-If you don't want to use config file, you can create Uni object with connectionString directly.
+If you don't want to use config file, you can create UniOrm object with connectionString directly.
 ```csharp
-var aw = new Uni(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True", DatabaseType.SQLServer);//Microsoft SQL Server
-var hr = new Uni(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR", DatabaseType.Oracle);//Oracle
-var sakila = new Uni(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
+var aw = new UniOrm(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True", DatabaseType.SQLServer);//Microsoft SQL Server
+var hr = new UniOrm(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR", DatabaseType.Oracle);//Oracle
+var sakila = new UniOrm(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
 ```
 
-How To Execute a Query?
------------------------
+##How To Execute a Query?
 Let's say we want to Query "Product" table. So, You just need to instantiate it inline.
 ```csharp
 //returns all the products
 var result = aw.dyno.Query(Schema: "Production", Table: "Product");
 ```
 Actually, after you write "aw.dyno" and click the point button, you will not see intellisense. Because, Methods and arguments after "aw.dyno" code
-are on the fly. But, Uni is smart and dynamic. So, it will generate and execute query according to your method and parameters.
+are on the fly. But, Uni.ORM is smart and dynamic. So, it will generate and execute query according to your method and parameters.
 
 ```csharp
 //if you want to use dynamic advantages, you should use dynamic. 
-//But, if you use like that, you will lose intellisense. So, you will not use other static methods of Uni.
-dynamic aw = new Uni("AdventureWorks");
+//But, if you use like that, you will lose intellisense. So, you will not use other static methods of Uni.ORM.
+dynamic aw = new UniOrm("AdventureWorks");
 var result = aw.Query(Schema: "Production", Table: "Product");
 
 //if you use as bellow, you just use dyno property without extra code
-var aw = new Uni("AdventureWorks");
+var aw = new UniOrm("AdventureWorks");
 var result = aw.dyno.Query(Schema: "Production", Table: "Product");
 //you can use intellisense here
 var result = aw.Count(commandType: System.Data.CommandType.TableDirect, schema: "Production", commandText: "Product");
@@ -76,9 +66,8 @@ You can also run classic queries.
 var result = aw.dyno.Query(Sql: "SELECT * FROM [Production].[Product]");
 ```
 
-Dynamic object and strongly typed result
-----------------------------------------
-Let's say you want to use POCO model, you can set your POCO type as generic in method. So, Uni will return strongly typed result.
+##Dynamic object and strongly typed result
+Let's say you want to use POCO model, you can set your POCO type as generic in method. So, Uni.ORM will return strongly typed result.
 ```csharp
 public class customer
 {
@@ -100,17 +89,15 @@ var result = sakila.dyno.Query<customer>(Table: "customer");
 var result = sakila.dyno.Query(Table: "customer");
 ```
 
-IN Statement
-------------
-You can use In statement with uni simply as below;
+##IN Statement
+You can use In statement with uni.ORM simply as below;
 ```csharp
-//This query is created by Uni
+//This query is created by Uni.ORM
 //SELECT ProductID,Name,ProductNumber FROM [Production].[Product] WHERE Color in (@Color0,@Color1,@Color2) and Size in (@Size0,@Size1,@Size2)
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
 ```
 
-LIMIT AND ORDERBY
------------------
+##LIMIT AND ORDERBY
 Let's say we need first row of our data. We need to set "Limit" argument as 1 (Limit:1) and "OrderBy" argument as "ASC"
 ```csharp
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "ListPrice=@ListPrice and Color in @Color", OrderBy: "ProductID", Limit: 1, ListPrice: 0, Color: new[] { "Red", "Black" });
@@ -120,8 +107,7 @@ we can also take last row in same way. Just change "OrderBy" from "ASC" to "DESC
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "ListPrice=@ListPrice and Color in @Color", OrderBy: "ProductID DESC", Limit: 1, ListPrice: 0, Color: new[] { "Red", "Black" });
 ```
 
-PAGING
-------
+##PAGING
 Let's say you need paging in you application. You just use query method with extra arguments which are "PageSize" and "PageNo" like below;
 ```csharp
 //First page 10 record
@@ -130,9 +116,8 @@ var sakilaResult4 = sakila.dyno.Query(Table: "customer", OrderBy: "address_id", 
 var sakilaResult5 = sakila.dyno.Query(Table: "customer", OrderBy: "address_id", PageSize: 10, PageNo: 2);
 ```
 
-Aggregate operations
---------------------
-You can also use aggregates. Actually, logic is same. So, you just change Method name and Uni will do his job.
+##Aggregate operations
+You can also use aggregates. Actually, logic is same. So, you just change Method name and Uni.ORM will do his job.
 You should't forget to set "Columns" argument for "Sum", "Max", "Min", "Avg" aggregates.
 ```csharp
 //Exists and In Usage
@@ -154,11 +139,10 @@ var result = aw.dyno.Min(Schema: "Production", Table: "Product", Columns: "ListP
 var result = aw.dyno.Avg(Schema: "Production", Table: "Product", Columns: "ListPrice", Where: "Color in @Color", Color: new[] { "Black", "Yellow" });
 ```
 
-Stored Procedure and Function
------------------------------
+##Stored Procedure and Function
 Let's say that you want to execute your stored procedure or function. Just use "SP" or "FN" arguments.
 If your stored procedure or function returns back output parameter, you should also use "CallBack" argument so that after method is executed,
-you can retrieve output parameters and sql statement which is generated by Uni
+you can retrieve output parameters and sql statement which is generated by Uni.ORM
 
 ```csharp
 //Simple usage of Stored procedure
@@ -173,8 +157,7 @@ var result = sakila.dyno.Query(CallBack: (Action<object>)(f => sakilaCallBack = 
 //Simple usage of Function
 var result = crm.dyno.Query(Schema: "User", FN: "fn_GetUserByUserID", Args: new object[] { 64, 1 });
 ```
-Insert, Update, Delete, BulkInsert and BulkUpdate Operations
-------------------------------------------------------------
+##Insert, Update, Delete, BulkInsert and BulkUpdate Operations
 
 ```csharp
 //Insert one record
@@ -250,9 +233,8 @@ var deleteResult = sakila.dyno.Delete(
 );
 ```
 
-Simple Join, GroupBy and Having
--------------------------------
-Let’s say you want to use simple join queries. Actually, you can use capabilities of Uni. 
+##Simple Join, GroupBy and Having
+Let’s say you want to use simple join queries. Actually, you can use capabilities of Uni.ORM. 
 First of all, we must ask ourselves that what is join. it is equality of specific table columns. 
 So, we can set “Table” argument as tables which we want to join and later we can set “Where” argument as columns which are equal such as following code. 
 If we use aggregate functions such as “SUM, MAX, MIN, AVG, COUNT” and normal column together such as “sum(amount), first_name” so, we should set “GroupBy” argument such as “GroupBy: first_name”. 
@@ -275,18 +257,9 @@ var result = ((IEnumerable<dynamic>)sakila.dyno.Query(
         Having: "SUM(p.amount)>100")).ToList();
 ```
 
-Some extension method
----------------------
-Let's say you need to create CSV file. Uni can generate for you
+##Some example codes
 ```csharp
-object result = sakila.dyno.Query(Table: "customer");
-string csvResult = result.ToEnumerable<dynamic>().WriteCsv<dynamic>(Encoding.Default);
-```
-
-Some example codes
-------------------
-```csharp
-//Actually, you can use Uni in several ways. below four lines of code will return same result.
+//Actually, you can use Uni.ORM in several ways. below four lines of code will return same result.
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Where: "Name=@0", Args: "Adjustable Race");
 
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Where: "Name=@0", Args: new object[] { "Adjustable Race" });
@@ -307,7 +280,7 @@ var result = aw.dyno.Query(Schema: "Production", Table: "Product", Where: "Color
 
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", ListPrice: 0, Color: "Black");
 
-//After this method runs, generated query will be below line. So, Uni have some standart arguments. But, others will be criteria.
+//After this method runs, generated query will be below line. So, Uni.ORM have some standart arguments. But, others will be criteria.
 //Let's look at below SQL query "Color" and "ListPrice" arguments added as criteria.
 //SELECT ProductID,Name,ProductNumber FROM [Production].[Product] WHERE ListPrice=@ListPrice AND Color=@Color ORDER BY ProductID DESC
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", OrderBy: "ProductID DESC", ListPrice: 0, Color: "Black");
