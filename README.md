@@ -332,6 +332,7 @@ var tables = ((IEnumerable<dynamic>)sakila.GetTables()).ToList();
 //Get columns of table
 var tableColumns = ((IEnumerable<dynamic>)sakila.GetColumns("customer")).ToList();
 
+//Below 5 rows generate same result
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
 
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
