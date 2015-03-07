@@ -163,14 +163,12 @@ var args = new
     Updated = DateTime.Now,
     IsDeleted = false
 };
-            
-List<dynamic> outputParameters;
 
 var listener = new Listener
 {
     OnCallback = new Action<Callback>((Callback f) =>
       {
-          outputParameters = f.OutputParameters;
+          decimal UserID = f.OutputParameters[0].UserID;
           string sql = f.SqlQuery;
       }),
     OnParameterCreating = new Func<DbParameter, DbParameter>((DbParameter f) =>
