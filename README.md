@@ -331,4 +331,14 @@ var tables = ((IEnumerable<dynamic>)sakila.GetTables()).ToList();
 
 //Get columns of table
 var tableColumns = ((IEnumerable<dynamic>)sakila.GetColumns("customer")).ToList();
+
+var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
+
+var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
+
+var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
+
+var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Color = new[] { "Black", "Yellow", "Red" }, Args: new { Size = new[] { "38", "40", "42" } });
+
+var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Size in @Size", Color = new[] { "Black", "Yellow", "Red" }, Args: new { Size = new[] { "38", "40", "42" } });
 ```
