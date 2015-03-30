@@ -3,9 +3,9 @@ Drop UniOrm C#.NET code file into your project and change it as you wish or you 
 
 If you want to install from Nuget, you should write Package Manager Console below code and Uni.ORM will be installed automatically.
 ```
-Install-Package Uni
+Install-Package Uni.ORM
 ```
-By the way, you can also reach Uni.ORM NuGet package from `http://nuget.org/packages/Uni` address.
+By the way, you can also reach Uni.ORM NuGet package from `https://www.nuget.org/packages/Uni.ORM/` address.
 
 ##How Do You Use It?
 Let's say that you installed database connectors in your machine.
@@ -273,19 +273,19 @@ That is all, this is just idea and you can develop different variations.
 
 ```csharp
 //Three tables are joined. customer and payment tables are joined with customer_id column. Later, payment and staff tables are joined with staff_id column
-var result = ((IEnumerable<dynamic>)sakila.dyno.Query(
+var result = sakila.dyno.Query(
         Table: "payment as p,customer as c,staff as s", 
         Columns: "p.*, CONCAT(s.first_name, ' ', s.last_name) as Staff_FullName, CONCAT(c.first_name, ' ', c.last_name) as Customer_FullName", 
         Where: "p.customer_id=c.customer_id and s.staff_id=p.staff_id and p.customer_id=?customer_id", 
-        customer_id: 1)).ToList();
+        customer_id: 1);
 
 //Get Total payment amounts which are bigger than 100 and payment counts according to customers
-var result = ((IEnumerable<dynamic>)sakila.dyno.Query(
+var result = sakila.dyno.Query(
         Table: "payment p,customer c", 
         Columns: "CONCAT(c.first_name, ' ', c.last_name) as Customer_FullName,SUM(p.amount) TotalPayment,COUNT(p.customer_id) PaymentCount",
         Where: "p.customer_id=c.customer_id",
         GroupBy: "Customer_FullName",
-        Having: "SUM(p.amount)>100")).ToList();
+        Having: "SUM(p.amount)>100");
 ```
 
 ##Some example codes
@@ -327,10 +327,10 @@ var result = sakila.dyno.Sum(Table: "payment", Columns: "amount", customer_id: 1
 var result = sakila.dyno.Query<string>(Table: "customer", Columns: "CONCAT(first_name, ' ', last_name) as FullName");
 
 //Get tables of database
-var tables = ((IEnumerable<dynamic>)sakila.GetTables()).ToList();
+var tables = sakila.GetTables();
 
 //Get columns of table
-var tableColumns = ((IEnumerable<dynamic>)sakila.GetColumns("customer")).ToList();
+var tableColumns = sakila.GetColumns("customer");
 
 //Below 5 rows generate same result
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
