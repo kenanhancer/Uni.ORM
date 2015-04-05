@@ -167,18 +167,18 @@ var args = new
 
 var listener = new Listener
 {
-    OnCallback = new Action<Callback>((Callback f) =>
+    OnCallback = (Callback f) =>
       {
           decimal UserID = f.OutputParameters[0].UserID;
           string sql = f.SqlQuery;
-      }),
-    OnParameterCreating = new Func<DbParameter, DbParameter>((DbParameter f) =>
+      },
+    OnParameterCreating = (DbParameter f) =>
      {
          if (f.ParameterName == "UserID")
              f.Direction = ParameterDirection.InputOutput;
 
          return f;
-     })
+     }
 };
 
 hr.dyno.NonQuery(Schema: "User", Package: "User_Package", Sp: "UserSP", Listeners: listener, Args: args);
