@@ -1,17 +1,17 @@
 ##How To Install It?
-Drop UniOrm and UniExtensions C#.NET code file into your project and change it as you wish or you can install from NuGet Galery;
+Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code file into your project and change it as you wish or you can install from NuGet Galery;
 
-If you want to install from Nuget, you should write Package Manager Console below code and Uni.ORM will be installed automatically.
+If you want to install from `Nuget`, you should write Package Manager Console below code and `Uni.ORM` will be installed automatically.
 ```
 Install-Package Uni.ORM
 ```
-By the way, you can also reach Uni.ORM NuGet package from `https://www.nuget.org/packages/Uni.ORM/` address.
+By the way, you can also reach `Uni.ORM NuGet` package from `https://www.nuget.org/packages/Uni.ORM/` address.
 
 ##How Do You Use It?
 Let's say that you installed database connectors in your machine.
-Your project doesn't need any DLL in references. Uni.ORM will find DLL which is necessary from the GAC.
+Your project doesn't need any DLL in references. `Uni.ORM` will find DLL which is necessary from the GAC.
 
-Let's have a look at config file for ConnectionStrings which will be used by Uni.ORM.
+Let's have a look at config file for ConnectionStrings which will be used by `Uni.ORM`.
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
