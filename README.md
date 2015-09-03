@@ -19,8 +19,11 @@ Let's have a look at config file for ConnectionStrings which will be used by `Un
 <configuration>
   <connectionStrings>
     <add name="AdventureWorks" connectionString="Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True" providerName="System.Data.SqlClient"/>
+    
     <add name="HR" connectionString="DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR" providerName="Oracle.DataAccess.Client"/>
+    
     <add name="Sakila" connectionString="server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;" providerName="MySql.Data.MySqlClient"/>
+    
     <add name="NorthwindSqlite" connectionString="Data Source=.\Northwind.sqlite;Version=3;" providerName="System.Data.Sqlite"/>
   </connectionStrings>
 </configuration>
@@ -31,16 +34,22 @@ Let's say we want to use Oracle database. We should set providerName as "Oracle.
 We can create UniOrm object now.
 ```csharp
 var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
+
 var hr = new UniOrm("HR");//Oracle
+
 var sakila = new UniOrm("Sakila");//MySQL
+
 var northwindSqlite = new UniOrm("NorthwindSqlite");//SQLite
 ```
 
 If you don't want to use config file, you can create UniOrm object with connectionString directly.
 ```csharp
 var aw = new UniOrm(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True", DatabaseType.SQLServer);//Microsoft SQL Server
+
 var hr = new UniOrm(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR", DatabaseType.Oracle);//Oracle
+
 var sakila = new UniOrm(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
+
 var northwindSqlite = new UniOrm(@"Data Source=.\Northwind.sqlite;Version=3;", DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);//SQLite
 ```
 
@@ -100,10 +109,10 @@ public class customer
 }
 
 //Execute and return strongly typed result
-var result = sakila.dyno.Query<customer>(Table: "customer");
+IEnumerable<customer> result = sakila.dyno.Query<customer>(Table: "customer");
 
 //Execute and return dynamic object result
-var result = sakila.dyno.Query(Table: "customer");
+IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer");
 ```
 
 ##IN Statement
@@ -131,6 +140,24 @@ Let's say you need paging in you application. You just use query method with ext
 var sakilaResult4 = sakila.dyno.Query(Table: "customer", OrderBy: "address_id", PageSize: 10, PageNo: 1);
 //Secodn page 10 record
 var sakilaResult5 = sakila.dyno.Query(Table: "customer", OrderBy: "address_id", PageSize: 10, PageNo: 2);
+```
+
+Use RowNumberColumn for Microsoft SQL Server
+```csharp
+//Generated Sql: SELECT TOP 50 * FROM (SELECT ROW_NUMBER() OVER (ORDER BY BusinessEntityID) AS RowNumber, * FROM (SELECT * FROM [Person].[Person]) as PagedTable) as PagedRecords WHERE RowNumber > 0
+var result1 = adventureWorks.dyno.Query(Schema: "Person", Table: "Person", RowNumberColumn: "BusinessEntityID", PageSize: 50, PageNo: 1);
+
+//Generated Sql: SELECT TOP 50 * FROM (SELECT ROW_NUMBER() OVER (ORDER BY BusinessEntityID) AS RowNumber, * FROM (SELECT * FROM [Person].[Person]) as PagedTable) as PagedRecords WHERE RowNumber > 50
+var result2 = adventureWorks.dyno.Query(Schema: "Person", Table: "Person", RowNumberColumn: "BusinessEntityID", PageSize: 50, PageNo: 2);
+```
+
+SQLite
+```csharp
+//Generated Sql: SELECT * FROM Products LIMIT 0,50
+IEnumerable<dynamic> result1 = northwindSqlite.dyno.Query(Table: "Products", PageSize: 50, PageNo: 1);
+
+//Generated Sql: SELECT * FROM Products LIMIT 50,50
+IEnumerable<dynamic> result2 = northwindSqlite.dyno.Query(Table: "Products", PageSize: 50, PageNo: 2);
 ```
 
 ##Aggregate operations
