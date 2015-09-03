@@ -21,6 +21,7 @@ Let's have a look at config file for ConnectionStrings which will be used by `Un
     <add name="AdventureWorks" connectionString="Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True" providerName="System.Data.SqlClient"/>
     <add name="HR" connectionString="DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR" providerName="Oracle.DataAccess.Client"/>
     <add name="Sakila" connectionString="server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;" providerName="MySql.Data.MySqlClient"/>
+    <add name="NorthwindSqlite" connectionString="Data Source=.\Northwind.sqlite;Version=3;" providerName="System.Data.Sqlite"/>
   </connectionStrings>
 </configuration>
 ```
@@ -32,6 +33,7 @@ We can create UniOrm object now.
 var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
 var hr = new UniOrm("HR");//Oracle
 var sakila = new UniOrm("Sakila");//MySQL
+var northwindSqlite = new UniOrm("NorthwindSqlite");//SQLite
 ```
 
 If you don't want to use config file, you can create UniOrm object with connectionString directly.
@@ -39,6 +41,7 @@ If you don't want to use config file, you can create UniOrm object with connecti
 var aw = new UniOrm(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True", DatabaseType.SQLServer);//Microsoft SQL Server
 var hr = new UniOrm(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR", DatabaseType.Oracle);//Oracle
 var sakila = new UniOrm(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
+var northwindSqlite = new UniOrm(@"Data Source=.\Northwind.sqlite;Version=3;", DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);//SQLite
 ```
 
 ##How To Execute a Query?
@@ -52,20 +55,32 @@ are on the fly. But, `Uni.ORM` is smart and dynamic. So, it will generate and ex
 
 ```csharp
 //if you want to use dynamic advantages, you should use dynamic. 
-//But, if you use like that, you will lose intellisense. So, you will not use other static methods of Uni.ORM.
+//But, if you use like that, you will lose intellisense.
 dynamic aw = new UniOrm("AdventureWorks");
+
 var result = aw.Query(Schema: "Production", Table: "Product");
 
 //if you use as bellow, you just use dyno property without extra code
 var aw = new UniOrm("AdventureWorks");
+
 var result = aw.dyno.Query(Schema: "Production", Table: "Product");
+
 //you can use intellisense here
 var result = aw.Count(commandType: System.Data.CommandType.TableDirect, schema: "Production", commandText: "Product");
 ```
 
 You can also run classic queries.
 ```csharp
-var result = aw.dyno.Query(Sql: "SELECT * FROM [Production].[Product]");
+IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM [Production].[Product]");
+
+IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Product WHERE ListPrice=@0 and Name=@1", Args: new object[] { 0, "Adjustable Race" });
+
+IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Product WHERE ListPrice=@ListPrice and Name=@Name", Args: new { ListPrice = 0, Name = "Adjustable Race" });
+
+IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Product WHERE ListPrice=@ListPrice and Name=@Name", ListPrice: 0, Name: "Adjustable Race");
+
+//Generated Sql: SELECT * FROM Production.Product WHERE ListPrice=@ListPrice AND Name=@Name
+IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Product", ListPrice: 0, Name: "Adjustable Race");
 ```
 
 ##Dynamic object and strongly typed result
