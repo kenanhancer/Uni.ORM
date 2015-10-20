@@ -7,7 +7,7 @@ If you want to install from `Nuget`, you should write Package Manager Console be
 ```
 Install-Package Uni.ORM
 ```
-By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.org/packages/Uni.ORM/ address.
+By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.org/packages/Uni.ORM/ address as shown below.
 
 ![uniormnuget](https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG)
 
