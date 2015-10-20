@@ -233,6 +233,7 @@ hr.dyno.NonQuery(Schema: "User", Package: "User_Package", Sp: "UserSP", Listener
 var result = crm.dyno.Query(Schema: "User", FN: "fn_GetUserByUserID", Args: new object[] { 64, 1 });
 ```
 ##Insert, Update, Delete, BulkInsert and BulkUpdate Operations
+`Uni.ORM` will generate Insert SQL query according to your object.
 
 ```csharp
 //Insert one record
@@ -242,12 +243,13 @@ var newID = sakila.dyno.Insert(
     Args: new { first_name = "kenan", last_name = "hancer", email = "kenanhancer@hotmail.com", active = true, store_id = 1, address_id = 5, create_date = DateTime.Now }
 );
 
+`Uni.ORM` will generate Delete SQL query according to parameters.
 //Delete record which is inserted
 var result = sakila.dyno.Delete(Table: "customer", PKField: "customer_id", Args: newID);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-//Insert more than one record
+//Insert more than one record (BulkInsert)
 var insertResult = sakila.dyno.Insert(
     Table: "customer",
     PKField: "customer_id",
@@ -265,14 +267,14 @@ var deleteResult = sakila.dyno.Delete(Table: "customer", PKField: "customer_id",
 //Update one record
 var updateResult = sakila.dyno.Update(
     Table: "customer",
-    PKField: "customer_id",
+    Columns: "active",
     Args: new { customer_id = 1, active = false }
 );
 
 //Update more than one record
 var updateResult = sakila.dyno.Update(
     Table: "customer",
-    PKField: "customer_id",
+    Columns: "active",
     Args: new object[] {
                 new { customer_id = 2, active = false },
                 new { customer_id = 3, active = false }
@@ -282,29 +284,32 @@ var updateResult = sakila.dyno.Update(
 
 //BulkInsert
 //Below code retriews first 5 rows and updates and then insert again database.
-var result = ((IEnumerable<dynamic>)sakila.dyno.Query(Table: "customer", Limit: 5, OrderBy: "customer_id")).ToList();
+IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer", Limit: 5, OrderBy: "customer_id"));
+result = result.ToList();
 result.ForEach(f => f.active = false);
 
-var bulkInsertResult = sakila.dyno.BulkInsert(
+var bulkInsertResult = sakila.dyno.Insert(
     Table: "customer",
     PKField: "customer_id",
-    Args: result.ToArray()
+    Args: result
 );
 
 //BulkUpdate
-var result = ((IEnumerable<dynamic>)sakila.dyno.Query(Table: "customer", Limit: 5, OrderBy: "customer_id DESC")).ToList();
+IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer", Limit: 5, OrderBy: "customer_id DESC");
+result = result.ToList();
 result.ForEach(f => f.active = true);
 
-var bulkUpdateResult = sakila.dyno.BulkUpdate(
+var bulkUpdateResult = sakila.dyno.Update(
     Table: "customer",
-    PKField: "customer_id",
-    Args: result.ToArray()
+    Columns: "active",
+    Where: "address_id=@address_id AND store_id=@store_id",
+    Args: result
 );
 
 var deleteResult = sakila.dyno.Delete(
     Table: "customer",
     PKField: "customer_id",
-    Args: result.ToArray()
+    Args: result
 );
 ```
 
