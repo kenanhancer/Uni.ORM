@@ -17,7 +17,8 @@ By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.
 Let's say that you installed database connectors in your machine.
 Your project doesn't need any DLL in references. `Uni.ORM` will find DLL which is necessary from the GAC.
 
-Let's have a look at config file for ConnectionStrings which will be used by `Uni.ORM`.
+###First Step
+Let's have a look at web.config or app.config file for ConnectionStrings which will be used by `Uni.ORM`.
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
@@ -29,12 +30,15 @@ Let's have a look at config file for ConnectionStrings which will be used by `Un
     <add name="Sakila" connectionString="server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;" providerName="MySql.Data.MySqlClient"/>
     
     <add name="NorthwindSqlite" connectionString="Data Source=.\Northwind.sqlite;Version=3;" providerName="System.Data.Sqlite"/>
+    
+    <add name="NorthwindPostgre" connectionString="HOST=localhost;PORT=5432;DATABASE=Northwind;USER ID=postgres;PASSWORD=123456;" providerName="NpgSql"/>
   </connectionStrings>
 </configuration>
 ```
-`Uni.ORM` can understand database that you want to use with providerName attribute in connectionString.
+`Uni.ORM` can understand database that you want to use with providerName attribute in connectionString. So, don't forget the providerName.
 Let's say we want to use Oracle database. We should set providerName as "Oracle.DataAccess.Client" as shown in config code.
 
+###Second Step
 We can create UniOrm object now.
 ```csharp
 var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
@@ -42,6 +46,8 @@ var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
 var hr = new UniOrm("HR");//Oracle
 
 var sakila = new UniOrm("Sakila");//MySQL
+
+var northwindPostgre = new UniOrm("NorthwindPostgre");//PostgreSQL
 
 var northwindSqlite = new UniOrm("NorthwindSqlite");//SQLite
 ```
@@ -53,7 +59,11 @@ var aw = new UniOrm(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;I
 var hr = new UniOrm(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR", DatabaseType.Oracle);//Oracle
 
 var sakila = new UniOrm(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
+```
 
+Let's say that you want to use SQLite database. You add SQLite DLL files in your project references. Becaues, you don't have DLLs in your GAC. 
+
+```csharp
 var northwindSqlite = new UniOrm(@"Data Source=.\Northwind.sqlite;Version=3;", DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);//SQLite
 ```
 
