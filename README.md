@@ -1,13 +1,15 @@
 `Uni.Orm` is the continuation of `Uni` project. Project name is just changed.
 
 ##How To Install It?
-Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or you can install from `NuGet Galery`;
+Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or you can install from `NuGet Galery`.
 
 If you want to install from `Nuget`, you should write Package Manager Console below code and `Uni.ORM` will be installed automatically.
 ```
 Install-Package Uni.ORM
 ```
 By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.org/packages/Uni.ORM/ address.
+
+![uniormnuget](https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG)
 
 ##How Do You Use It?
 Let's say that you installed database connectors in your machine.
