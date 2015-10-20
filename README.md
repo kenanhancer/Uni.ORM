@@ -3,10 +3,12 @@
 ##How To Install It?
 Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or you can install from `NuGet Galery`.
 
-If you want to install from `Nuget`, you should write Package Manager Console below code and `Uni.ORM` will be installed automatically.
+If you want to install from `Nuget`, you should write Package Manager Console below code and `Uni.ORM` will be installed automatically as shown below.
 ```
 Install-Package Uni.ORM
 ```
+![uniormpkmanager](https://cloud.githubusercontent.com/assets/1851856/10601862/474b5baa-771d-11e5-9a15-0abe16097ab7.PNG)
+
 By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.org/packages/Uni.ORM/ address as shown below.
 
 ![uniormnuget](https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG)
