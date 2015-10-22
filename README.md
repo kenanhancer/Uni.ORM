@@ -327,6 +327,160 @@ var deleteResult = sakila.dyno.Delete(
 );
 ```
 
+##Listeners(Events)
+`Uni.ORM` supports some special events which are `OnCallback`, `OnCommandPreExecuting`, `OnConvertingResult`, `OnParameterCreating`, `OnPreGeneratingSql`
+
+Let’s say you want to convert Delete result from int to bool. You just use `OnConvertingResult` event. After executing query `OnCallback` give you some detail such as SqlQuery that is genetated by `Uni.Orm`
+
+```csharp
+var options = new Options
+{
+    EventListener = new Listener
+    {
+        OnConvertingResult = (sqlEntity, result) =>
+        {
+            if (sqlEntity.Binder == "delete")
+                return result.To<bool>();
+
+            return result;
+        }
+    }
+};
+
+bool result1 = oracle.dyno.Delete(Table: "PRODUCTS",
+                                  PKField: "PRODUCTID",
+                                  Options: options,
+                                  Args: 79);
+```
+
+You can also set OnConvertingResult and OnCallback parameters directly.
+```csharp
+Func<SqlEntity, object, object> onConvertingResult = (sqlEntity, result) => result.To<bool>();
+
+Action<Callback> onCallback = callback => Console.WriteLine("SqlQuery is {0}", callback.SqlQuery);
+
+bool result5 = oracle.dyno.Delete(Table: "PRODUCTS",
+                                  PKField: "PRODUCTID",
+                                  OnConvertingResult: onConvertingResult,
+                                  OnCallback: onCallback,
+                                  Args: new object[] { 88, 89 });
+```
+
+
+##Transaction
+`Uni.ORM` supports transaction based operations. You just need to set Options parameter as below.
+
+```csharp
+var options = new Options { Transaction = oracle.NewConnection().BeginTransaction() };
+
+var result1 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Options: options,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 1",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+var result2 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Options: options,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 2",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+var result3 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Options: options,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 3",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+options.Transaction.Commit();
+```
+
+You can also set Trasaction parameter directly.
+
+```csharp
+DbTransaction transaction = oracle.NewConnection().BeginTransaction();
+
+var result1 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Transaction: transaction,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 1",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+var result2 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Transaction: transaction,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 2",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+var result3 = oracle.dyno.Insert(Table: "PRODUCTS",
+                                PKField: "PRODUCTID",
+                                Sequence: "SC_PRODUCT",
+                                Transaction: transaction,
+                                Args: new
+                                {
+                                    PRODUCTID = 0,
+                                    PRODUCTNAME = "Test Product 3",
+                                    SUPPLIERID = 12,
+                                    CATEGORYID = 2,
+                                    QUANTITYPERUNIT = "12 boxes",
+                                    UNITPRICE = 10,
+                                    UNITSINSTOCK = 50,
+                                    DISCONTINUED = 0
+                                });
+
+transaction.Commit();
+```
+
+
 ##Simple Join, GroupBy and Having
 Let’s say you want to use simple join queries. Actually, you can use capabilities of `Uni.ORM`. 
 First of all, we must ask ourselves that what is join. it is equality of specific table columns. 
