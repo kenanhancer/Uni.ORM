@@ -265,33 +265,29 @@ var result = aw.dyno.Query(Schema: "Person", Sp: "GetPersonList");
 
 //Stored Procedure and CallBack(You can take output parameter of SP)
 
-var args = new
-{
-    UserID = (decimal)0,
-    UserName = "Kenan",
-    Password = 188231,
-    Created = DateTime.Now,
-    Updated = DateTime.Now,
-    IsDeleted = false
-};
+dynamic args = new ExpandoObject();
+args.RETURN_VALUE = (int)0;
+args.ErrorLogID = (int)0;
 
 var listener = new Listener
 {
     OnCallback = (Callback f) =>
-      {
-          decimal UserID = f.OutputParameters[0].UserID;
-          string sql = f.SqlQuery;
-      },
-    OnParameterCreating = (DbParameter f) =>
-     {
-         if (f.ParameterName == "UserID")
-             f.Direction = ParameterDirection.InputOutput;
+    {
+        //Callback returns back some variables.(Sql statement and Stored procedure output parameters)
+        Console.WriteLine(f.SqlQuery);
 
-         return f;
-     }
+        args.RETURN_VALUE = f.OutputParameters.RETURN_VALUE;
+    },
+    OnParameterCreating = (DbParameter f) =>
+    {
+        if (f.ParameterName == "ErrorLogID")
+            f.Direction = ParameterDirection.Output;
+        else if (f.ParameterName == "RETURN_VALUE")
+            f.Direction = ParameterDirection.ReturnValue;
+    }
 };
 
-hr.dyno.NonQuery(Schema: "User", Package: "User_Package", Sp: "UserSP", Listeners: listener, Args: args);
+adventureWorks.dyno.NonQuery(Sp: "uspLogError", Options: new Options { EventListener = listener }, Args: args);
 ```
 
 ```csharp
