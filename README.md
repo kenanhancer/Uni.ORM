@@ -108,6 +108,7 @@ IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Produ
 
 ##Dynamic object and strongly typed result
 Let's say you want to use `POCO` model, you can set your `POCO` type as generic in method. So, `Uni.ORM` will return strongly typed result.
+
 ```csharp
 public class customer
 {
