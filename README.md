@@ -129,6 +129,43 @@ IEnumerable<customer> result = sakila.dyno.Query<customer>(Table: "customer");
 IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer");
 ```
 
+##Generating POCO Model
+Let's say that you need to generate POCO Model. It is easy.
+
+```csharp
+//This code will return dynamic mapped result.
+var result1 = oracle.dyno.Query(Table: "PRODUCTS", Limit: 1);
+
+var anonymousObj = new UniAnonymousObject();
+
+var productType = anonymousObj.GetDynamicType(result1, "PRODUCTS");
+
+string productPoco = anonymousObj.GetPoco(result1, "PRODUCTS");
+```
+
+Generated POCO class
+
+```csharp
+public class PRODUCTS
+{
+    public decimal PRODUCTID { get; set; }
+    public string PRODUCTNAME { get; set; }
+    public decimal SUPPLIERID { get; set; }
+    public decimal CATEGORYID { get; set; }
+    public string QUANTITYPERUNIT { get; set; }
+    public decimal UNITPRICE { get; set; }
+    public decimal UNITSINSTOCK { get; set; }
+    public decimal UNITSONORDER { get; set; }
+    public decimal REORDERLEVEL { get; set; }
+    public decimal DISCONTINUED { get; set; }
+}
+```
+
+Let's use generated POCO type.
+```csharp
+IEnumerable<PRODUCTS> result2 = oracle.dyno.Query<PRODUCTS>(Table: "PRODUCTS");
+```
+
 ##IN Statement
 You can use In statement with `Uni.ORM` simply as below;
 ```csharp
@@ -195,6 +232,20 @@ var result = aw.dyno.Min(Schema: "Production", Table: "Product", Columns: "ListP
 
 //Avg and In Usage
 var result = aw.dyno.Avg(Schema: "Production", Table: "Product", Columns: "ListPrice", Where: "Color in @Color", Color: new[] { "Black", "Yellow" });
+```
+
+##Some Cast Operations
+Uni.Orm has some direct cast operations which are `GetBool`, `GetInt`, `GetLong`, `GetDecimal`, `GetDouble`, `GetFloat`, `GetDateTime`, `GetValue`
+
+```csharp
+decimal result1 = adventureWorks.dyno.GetDecimal(Sql: "SELECT AVG(ListPrice) ListPrice FROM Production.Product");
+
+OR
+
+decimal result2 = adventureWorks.dyno.Query<decimal>(Sql: "SELECT AVG(ListPrice) ListPrice FROM Production.Product WHERE Name=@Name", Limit: 1, Name: "Sport-100 Helmet, Red");
+
+bool result3 = adventureWorks.dyno.GetBool(Sql: "SELECT CASE WHEN EXISTS(SELECT * FROM Production.Product) THEN 1 ELSE 0 END as RESULT", Limit: 1);
+
 ```
 
 ##Stored Procedure and Function
@@ -480,6 +531,43 @@ var result3 = oracle.dyno.Insert(Table: "PRODUCTS",
 transaction.Commit();
 ```
 
+##Config Based Query
+Let’s say that you need to make a query. But, this `Uni.Orm` query parameters also should be set as a json data. So, you can make query dynamicly. :)
+
+```csharp
+var options = new Options();
+options.EventListener = new Listener
+{
+    OnCallback = (Callback f) =>
+    {
+        Console.WriteLine(f.SqlQuery);
+    },
+    OnParameterCreating = (DbParameter f) =>
+    {
+    
+    }
+};
+            
+string json = @"{
+  'Operation': 'Query',
+  'Table': 'Products',
+  'Where': 'ProductName in @ProductName',
+  'ProductName': [
+    'Chai',
+    'Chang',
+    'Aniseed Syrup',
+    'Mishi Kobe Niku',
+    'Ikura'
+  ]
+}";
+
+dynamic criteria = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(json);
+criteria.Options = options;
+
+IEnumerable<dynamic> result = northwindSqlite.dyno.Execute(criteria);
+
+result = result.ToList();
+```
 
 ##Simple Join, GroupBy and Having
 Let’s say you want to use simple join queries. Actually, you can use capabilities of `Uni.ORM`. 
@@ -559,4 +647,52 @@ var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "Pro
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Color = new[] { "Black", "Yellow", "Red" }, Args: new { Size = new[] { "38", "40", "42" } });
 
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Size in @Size", Color = new[] { "Black", "Yellow", "Red" }, Args: new { Size = new[] { "38", "40", "42" } });
+
+var result1 = northwindSqlite.dyno.Count(Table: "Products", Columns: "ProductName");
+
+var result2 = northwindSqlite.dyno.Count(Table: "Products", Columns: "*");
+
+var result3 = northwindSqlite.dyno.Count(Table: "Products", Columns: "*", Where: "ProductID=@0", Args: 1);
+
+var result4 = northwindSqlite.dyno.Exists(Table: "Products", Where: "ProductID IN (@0,@1)", Args: new object[] { 1, 2 });
+
+var result5 = northwindSqlite.dyno.Sum(Table: "Products", Columns: "UnitPrice");
+
+var result6 = northwindSqlite.dyno.Max(Table: "Products", Columns: "UnitPrice");
+
+var result7 = northwindSqlite.dyno.Min(Table: "Products", Columns: "UnitPrice");
+
+var result8 = northwindSqlite.dyno.Avg(Table: "Products", Columns: "UnitPrice");
+
+var result9 = northwindSqlite.dyno.Query(Table: "Customers", Columns: "CompanyName", Where: "Region IS NULL");
+
+var result10 = northwindSqlite.dyno.Query(Table: "Customers", Columns: "CompanyName", Where: "Region IS NULL", City: "London");
+
+var result11 = northwindSqlite.dyno.Sum(Table: "Products", Columns: "UnitPrice", CategoryID: 1);
+
+var result12 = northwindSqlite.dyno.Sum(Table: "Products", Columns: "UnitPrice", Where: "CategoryID IN @CategoryID", CategoryID: new object[] { 1, 2 });
+
+IEnumerable<dynamic> result13 = northwindSqlite.dyno.Query(Table: "Products", Columns: "UnitPrice", Where: "CategoryID IN @CategoryID", CategoryID: new object[] { 1, 2 });
+
+result13 = result13.ToList();
+
+IEnumerable<dynamic> result14 = northwindSqlite.dyno.Query(Table: "Customers", Columns: "CompanyName", Where: "Region IS NULL", City: "London");
+
+result14 = result14.ToList();
+
+IEnumerable<Products> result15 = northwindSqlite.dyno.Query<Products>(Sql: "SELECT * FROM Products");
+
+result15 = result15.ToList();
+
+var result16 = northwindSqlite.dyno.Sum(Table: "Products", Columns: "UnitPrice", CategoryID: new object[] { 1, 2 });
+
+IEnumerable<dynamic> result17 = northwindSqlite.dyno.Query(Table: "Products", CategoryID: new object[] { 1, 2, 3, 4, 5, 6, 7 });
+
+result17 = result17.ToList();
+
+IEnumerable<Products> result18 = northwindSqlite.dyno.Query<Products>(Table: "Products", CategoryID: new object[] { 1, 2, 3, 4, 5, 6, 7 });
+
+result18 = result18.ToList();
+
+Products result19 = northwindSqlite.dyno.Query<Products>(Sql: "SELECT * FROM Products", Limit: 1);
 ```
