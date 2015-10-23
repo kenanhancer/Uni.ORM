@@ -1,5 +1,7 @@
 `Uni.Orm` is the continuation of `Uni` project. Project name is just changed.
 
+`Uni.Orm` is a simple and lightweight micro ORM. It is developed as a compact single class library. you just use a few basic methods that enable you to do the job with minimal efort.
+
 ##How To Install It?
 Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or you can install from `NuGet Galery`.
 
