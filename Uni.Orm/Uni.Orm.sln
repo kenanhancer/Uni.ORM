@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uni.Orm", "Uni.Orm.csproj", "{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uni.Orm.Test", "..\Uni.Orm.Test\Uni.Orm.Test.csproj", "{0527A14A-821B-4D92-BAF6-C20C098B9476}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://kenanhancer.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Uni.Orm.csproj
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = ..\\Uni.Orm.Test\\Uni.Orm.Test.csproj
+		SccProjectName2 = ../Uni.Orm.Test
+		SccLocalPath2 = ..\\Uni.Orm.Test
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Debug|x64.ActiveCfg = Debug|x64
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Debug|x64.Build.0 = Debug|x64
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Release|x64.ActiveCfg = Release|x64
+		{617C6F60-0ED2-4A14-9D7F-EAE04B63D09B}.Release|x64.Build.0 = Release|x64
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0527A14A-821B-4D92-BAF6-C20C098B9476}.Release|x64.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

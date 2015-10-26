@@ -1,0 +1,6 @@
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\Release\Uni.Orm.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\Release\Uni.Orm.pdb
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\Release\Uni.Extensions.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Release\Uni.Orm.csprojResolveAssemblyReference.cache
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Release\Uni.Orm.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Release\Uni.Orm.pdb
