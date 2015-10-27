@@ -534,19 +534,7 @@ transaction.Commit();
 Let’s say that you need to make a query. But, this `Uni.Orm` query parameters also should be set as a json data. So, you can make query dynamicly. :)
 
 ```csharp
-var options = new Options();
-options.EventListener = new Listener
-{
-    OnCallback = (Callback f) =>
-    {
-        Console.WriteLine(f.SqlQuery);
-    },
-    OnParameterCreating = (DbParameter f) =>
-    {
-    
-    }
-};
-            
+
 string json = @"{
   'Operation': 'Query',
   'Table': 'Products',
@@ -561,6 +549,19 @@ string json = @"{
 }";
 
 dynamic criteria = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(json);
+
+var options = new Options();
+options.EventListener = new Listener
+{
+    OnCallback = (Callback f) =>
+    {
+        Console.WriteLine(f.SqlQuery);
+    },
+    OnParameterCreating = (DbParameter f) =>
+    {
+    
+    }
+};
 criteria.Options = options;
 
 IEnumerable<dynamic> result = northwindSqlite.dyno.Execute(criteria);
