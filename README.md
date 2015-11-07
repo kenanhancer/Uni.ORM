@@ -1,6 +1,6 @@
 `Uni.Orm` is the continuation of `Uni` project. Project name is just changed.
 
-`Uni.Orm` is a simple and lightweight micro ORM. It is developed as a compact single class library. Just use a few basic methods that enable you to do the job with minimal effort.
+`Uni.Orm` is a simple and lightweight micro ORM. It has been developed as a compact single class library enabling to do the job with minimal effort just by using a few basic methods.
 
 ##How To Install It?
 Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or install from `NuGet Galery`.
@@ -16,8 +16,8 @@ By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.
 ![uniormnuget](https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG)
 
 ##How Do You Use It?
-Let's say that you installed database connectors in your machine.
-Your project doesn't need any DLL in references. `Uni.ORM` will find DLL which is necessary from the GAC.
+Suppose you installed database connectors in your machine.
+Your project does not need any DLL in references. `Uni.ORM` will find DLL which is necessary from the GAC.
 
 ###First Step
 Let's have a look at web.config or app.config file for ConnectionStrings which will be used by `Uni.ORM`.
@@ -37,11 +37,11 @@ Let's have a look at web.config or app.config file for ConnectionStrings which w
   </connectionStrings>
 </configuration>
 ```
-`Uni.ORM` can understand database that you want to use with providerName attribute in connectionString. So, don't forget the providerName.
-Let's say we want to use Oracle database. We should set providerName as "Oracle.DataAccess.Client" as shown in config code.
+`Uni.ORM` has the ability to understand the database you want to use with providerName attribute in connectionString. So, don't forget the providerName.
+Suppose we want to use Oracle database. The providerName must be set as "Oracle.DataAccess.Client" as shown in the below config code.
 
 ###Second Step
-We can create UniOrm object now.
+Create UniOrm object now.
 ```csharp
 var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
 
@@ -54,7 +54,7 @@ var northwindPostgre = new UniOrm("NorthwindPostgre");//PostgreSQL
 var northwindSqlite = new UniOrm("NorthwindSqlite");//SQLite
 ```
 
-If you don't want to use config file, you can create UniOrm object with connectionString directly.
+Create UniOrm object with connectionString directly in case you don't want to use config file.
 ```csharp
 var aw = new UniOrm(@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True", DatabaseType.SQLServer);//Microsoft SQL Server
 
@@ -63,20 +63,19 @@ var hr = new UniOrm(@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=Tru
 var sakila = new UniOrm(@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;", DatabaseType.MySQL);//MySQL
 ```
 
-Let's say that you want to use SQLite database. You add SQLite DLL files in your project references. Becaues, you don't have DLLs in your GAC. 
+Suppose you want to use SQLite database. Add SQLite DLL files in your project references as you don't have DLLs in your GAC. 
 
 ```csharp
 var northwindSqlite = new UniOrm(@"Data Source=.\Northwind.sqlite;Version=3;", DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);//SQLite
 ```
 
 ##How To Execute a Query?
-Let's say we want to Query "Product" table. So, You just need to instantiate it inline.
+Suppose we want to Query "Product" table. All you need is to instantiate it inline.
 ```csharp
 //returns all the products
 var result = aw.dyno.Query(Schema: "Production", Table: "Product");
 ```
-Actually, after you write "aw.dyno" and click the point button, you will not see intellisense. Because, Methods and arguments after "aw.dyno" code
-are on the fly. But, `Uni.ORM` is smart and dynamic. So, it will generate and execute query according to your method and parameters.
+Actually, after you write "aw.dyno" and click the point button, you will not see intellisense. Because, methods and arguments after "aw.dyno" code are on the fly. But, `Uni.ORM` is smart and dynamic. So, it will generate and execute query according to your method and parameters.
 
 ```csharp
 //if you want to use dynamic advantages, you should use dynamic. 
@@ -109,7 +108,7 @@ IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Produ
 ```
 
 ##Dynamic object and strongly typed result
-Let's say you want to use `POCO` model, you can set your `POCO` type as generic in method. So, `Uni.ORM` will return strongly typed result.
+Suppose you want to use `POCO` model, you can set your `POCO` type as generic in method. So, `Uni.ORM` will return strongly typed result.
 
 ```csharp
 public class customer
@@ -133,7 +132,7 @@ IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer");
 ```
 
 ##Generating POCO Model
-Let's say that you need to generate POCO Model. It is easy.
+Below is an easy way how to generate POCO Model.
 
 ```csharp
 //This code will return dynamic mapped result.
