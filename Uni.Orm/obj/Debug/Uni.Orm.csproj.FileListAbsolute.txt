@@ -4,8 +4,3 @@ C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\Debug\Uni.Extensions.dll
 C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Debug\Uni.Orm.dll
 C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Debug\Uni.Orm.pdb
 C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\Debug\Uni.Orm.csprojResolveAssemblyReference.cache
-C:\Users\dtkhancer\Documents\GitHub\Uni.ORM\Uni.Orm\bin\Debug\Uni.Orm.dll
-C:\Users\dtkhancer\Documents\GitHub\Uni.ORM\Uni.Orm\bin\Debug\Uni.Orm.pdb
-C:\Users\dtkhancer\Documents\GitHub\Uni.ORM\Uni.Orm\obj\Debug\Uni.Orm.csprojResolveAssemblyReference.cache
-C:\Users\dtkhancer\Documents\GitHub\Uni.ORM\Uni.Orm\obj\Debug\Uni.Orm.dll
-C:\Users\dtkhancer\Documents\GitHub\Uni.ORM\Uni.Orm\obj\Debug\Uni.Orm.pdb

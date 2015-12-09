@@ -1,0 +1,5 @@
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\x64\Debug\Uni.Orm.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\x64\Debug\Uni.Orm.pdb
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\bin\x64\Debug\Uni.Extensions.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\x64\Debug\Uni.Orm.dll
+C:\Users\dtkhancer\Documents\KenanUni\Uni\Uni.Orm\obj\x64\Debug\Uni.Orm.pdb

@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data;
 using Uni.Extensions;
 using System.Dynamic;
+using System.Diagnostics;
 
 namespace Uni.Orm.Test
 {
@@ -80,6 +81,50 @@ namespace Uni.Orm.Test
 
             Products result19 = northwindSqlite.dyno.Query<Products>(Sql: "SELECT * FROM Products", Limit: 1);
         }
+
+        [TestMethod]
+        public void Exercise2()
+        {
+            //This code will return dynamic mapped result.
+            IEnumerable<Person> result1 = northwindSqlite.dyno.Query<Person>(Table: "Products", Limit: 100);
+
+            result1 = result1.ToList();
+
+            var firstItem = result1.FirstOrDefault();
+
+            var anonymousObj = new UniAnonymousObject();
+
+            var personType = anonymousObj.GetDynamicType(firstItem, "Person");
+
+            string personPoco = anonymousObj.GetPoco(firstItem, "Person");
+        }
+
+        [TestMethod]
+        public void Exercise3()
+        {
+            IEnumerable<Products> result1 = northwindSqlite.dyno.Query<Products>(Sql: "SELECT * FROM Products");
+
+            IEnumerable<dynamic> result2 = northwindSqlite.dyno.Query(Sql: "SELECT * FROM Products");
+        }
+
+        [TestMethod]
+        public void Exercise4()
+        {
+            //IEnumerable<Products> result1 = northwindSqlite.dyno.Query<Products>(Sql: "SELECT * FROM Customers");
+
+            IEnumerable<dynamic> result2 = northwindSqlite.dyno.Query(Sql: "SELECT * FROM Products");
+        }
+
+        public class Person
+        {
+
+            public long PersonID { get; set; }
+
+            public string FirstName { get; set; }
+
+            public string LastName { get; set; }
+        }
+
 
         [TestMethod]
         public void InsertTest()

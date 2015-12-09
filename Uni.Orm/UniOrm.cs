@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using Uni.Extensions;
@@ -65,9 +67,9 @@ namespace Uni.Orm
         public string Sequence { get; set; }
         public string RowNumberColumn { get; set; }
         //public string GeneratedSql { get; set; }
-        public int Limit { get; set; }
-        public int PageSize { get; set; }
-        public int PageNo { get; set; }
+        public long Limit { get; set; }
+        public long PageSize { get; set; }
+        public long PageNo { get; set; }
         public List<ArgumentEntity> NamedArguments { get; set; }
         public List<object> ArrayArguments { get; set; }
         public SqlEntity()
@@ -562,35 +564,67 @@ namespace Uni.Orm
         public virtual IEnumerable<dynamic> Query(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args)
         {
             options = options ?? Options;
+            List<dynamic> result = new List<dynamic>();
             using (var con = NewConnection())
             {
                 var com = NewCommand(commandType: commandType, schema: schema, package: package, commandText: commandText, con: con, options: options, args: args);
                 var reader = com.ExecuteReader();
+                //dynamic dynamicRow = new ExpandoObject();
+                //string propName;
+                //object value = null;
+                //while (reader.Read())
+                //{
+                //    dynamicRow = new ExpandoObject();
+                //    var dynamicRowDict = dynamicRow as IDictionary<string, object>;
+                //    for (int x = 0; x < reader.FieldCount; x++)
+                //    {
+                //        propName = reader.GetName(x);
+                //        value = reader[x];
+                //        dynamicRowDict.Add(propName, DBNull.Value.Equals(value) ? null : value);
+                //    }
+
+                //    result.Add(dynamicRow);
+                //    //yield return reader.ToExpando<Attribute>();
+                //}
+
+                var expandoObjectMap = reader.ToExpandoObjectMapMethod();
                 while (reader.Read())
-                    yield return reader.ToExpando<Attribute>();
+                    result.Add(expandoObjectMap(reader));
+                    //yield return expandoObjectMap(reader);
+
                 if (options.EventListener.OnCallback != null)
                     options.EventListener.OnCallback(new Callback { SqlQuery = com.CommandText, OutputParameters = GetOutputParameters(com) });
             }
+            return result;
         }
-        public virtual IEnumerable<T> Query<T>(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args)
+        public virtual IEnumerable<T> Query<T>(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args) where T : new()
         {
             options = options ?? Options;
-            //List<T> retVal = new List<T>();
+            List<T> retVal = new List<T>();
+            DbCommand com = null;
+            DbDataReader reader = null;
             using (var con = NewConnection())
             {
-                var com = NewCommand(commandType: commandType, schema: schema, package: package, commandText: commandText, con: con, options: options, args: args);
-                var reader = com.ExecuteReader();
+                com = NewCommand(commandType: commandType, schema: schema, package: package, commandText: commandText, con: con, options: options, args: args);
+                reader = com.ExecuteReader();
+                //First Way
+                var entityMap = reader.ToEntityMapMethod<T>();
                 while (reader.Read())
-                    //retVal.Add(reader.To<T, Attribute>(fieldNameLower: options.FieldNameLower));
-                    yield return reader.To<T, Attribute>(fieldNameLower: options.FieldNameLower);
+                {
+                    var a1 = reader[0];
+                    //yield return entityMap(reader);
+                    retVal.Add(entityMap(reader));
+                }
+                //Second Way
+                //retVal = reader.ToEntityListMapMethod<T>()(reader);
                 if (options.EventListener.OnCallback != null)
                     options.EventListener.OnCallback.Invoke(new Callback { SqlQuery = com.CommandText, OutputParameters = GetOutputParameters(com) });
             }
-            //return retVal;
+            return retVal;
         }
         private IEnumerable<dynamic> ResultSet(int index, DbCommand com)
         {
-            List<dynamic> result = new List<dynamic>();
+            //List<dynamic> result = new List<dynamic>();
             using (var con = NewConnection())
             {
                 var newCom = CloneCommand(com);
@@ -601,9 +635,13 @@ namespace Uni.Orm
                 {
                     if (i++ == index)
                         while (reader.Read())
+                        {
+                            //result.Add(reader.ToExpando<Attribute>());
                             yield return reader.ToExpando<Attribute>();
+                        }
                 } while (reader.NextResult());
             }
+            //return result;
         }
         public virtual object ExecuteScalar(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args)
         {
@@ -783,6 +821,7 @@ namespace Uni.Orm
                     multiResultSet = argsValue;
                 else if (argsName == "args")
                 {
+                    if (argsValue == null) continue;
                     argsParameterValue = argsValue;
                     argsParameterValueType = argsValue.GetType();
                     argsParameterValueAsCollection = argsParameterValue as ICollection<object>;
