@@ -564,38 +564,19 @@ namespace Uni.Orm
         public virtual IEnumerable<dynamic> Query(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args)
         {
             options = options ?? Options;
-            List<dynamic> result = new List<dynamic>();
+            //List<dynamic> result = new List<dynamic>();
             using (var con = NewConnection())
             {
                 var com = NewCommand(commandType: commandType, schema: schema, package: package, commandText: commandText, con: con, options: options, args: args);
                 var reader = com.ExecuteReader();
-                //dynamic dynamicRow = new ExpandoObject();
-                //string propName;
-                //object value = null;
-                //while (reader.Read())
-                //{
-                //    dynamicRow = new ExpandoObject();
-                //    var dynamicRowDict = dynamicRow as IDictionary<string, object>;
-                //    for (int x = 0; x < reader.FieldCount; x++)
-                //    {
-                //        propName = reader.GetName(x);
-                //        value = reader[x];
-                //        dynamicRowDict.Add(propName, DBNull.Value.Equals(value) ? null : value);
-                //    }
-
-                //    result.Add(dynamicRow);
-                //    //yield return reader.ToExpando<Attribute>();
-                //}
-
                 var expandoObjectMap = reader.ToExpandoObjectMapMethod();
                 while (reader.Read())
-                    result.Add(expandoObjectMap(reader));
-                    //yield return expandoObjectMap(reader);
-
+                    //result.Add(expandoObjectMap(reader));
+                    yield return expandoObjectMap(reader);
                 if (options.EventListener.OnCallback != null)
                     options.EventListener.OnCallback(new Callback { SqlQuery = com.CommandText, OutputParameters = GetOutputParameters(com) });
             }
-            return result;
+            //return result;
         }
         public virtual IEnumerable<T> Query<T>(CommandType commandType = CommandType.Text, string schema = "", string package = "", string commandText = "", Options options = null, params object[] args) where T : new()
         {
@@ -607,16 +588,7 @@ namespace Uni.Orm
             {
                 com = NewCommand(commandType: commandType, schema: schema, package: package, commandText: commandText, con: con, options: options, args: args);
                 reader = com.ExecuteReader();
-                //First Way
-                var entityMap = reader.ToEntityMapMethod<T>();
-                while (reader.Read())
-                {
-                    var a1 = reader[0];
-                    //yield return entityMap(reader);
-                    retVal.Add(entityMap(reader));
-                }
-                //Second Way
-                //retVal = reader.ToEntityListMapMethod<T>()(reader);
+                retVal = reader.ToEntityListMapMethod<T>()(reader);
                 if (options.EventListener.OnCallback != null)
                     options.EventListener.OnCallback.Invoke(new Callback { SqlQuery = com.CommandText, OutputParameters = GetOutputParameters(com) });
             }
@@ -635,10 +607,8 @@ namespace Uni.Orm
                 {
                     if (i++ == index)
                         while (reader.Read())
-                        {
                             //result.Add(reader.ToExpando<Attribute>());
                             yield return reader.ToExpando<Attribute>();
-                        }
                 } while (reader.NextResult());
             }
             //return result;
