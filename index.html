@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Uni.Orm by kenanhancer</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Uni.Orm</h1>
+        <h2>A simple and lightweight data access tool for .Net</h2>
+        <a href="https://github.com/kenanhancer/Uni.ORM" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p><code>Uni.Orm</code> is the continuation of <code>Uni</code> project. Project name is just changed.</p>
+
+<p><code>Uni.Orm</code> is a simple and lightweight micro ORM. It has been developed as a compact single class library enabling to do the job with minimal effort just by using a few basic methods.</p>
+
+<h2>
+<a id="performance" class="anchor" href="#performance" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Performance</h2>
+
+<p><img src="https://cloud.githubusercontent.com/assets/1851856/11440560/3e3438d6-950c-11e5-8a67-fa479f75a839.jpg" alt="orm_comp"></p>
+
+<h2>
+<a id="how-to-install-it" class="anchor" href="#how-to-install-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How To Install It?</h2>
+
+<p>Drop <code>UniOrm.cs</code> and <code>UniExtensions.cs</code> C#.NET code files into your project and change it as you wish or install from <code>NuGet Galery</code>.</p>
+
+<p>If you want to install from <code>Nuget</code>, you should write Package Manager Console below code and <code>Uni.ORM</code> will be installed automatically as shown below.</p>
+
+<pre><code>Install-Package Uni.ORM
+</code></pre>
+
+<p><img src="https://cloud.githubusercontent.com/assets/1851856/10602062/d7680ef8-771e-11e5-8f88-2945bc3f74ea.PNG" alt="uniormpkmanager"></p>
+
+<p>By the way, you can also reach <code>Uni.ORM</code> <code>NuGet</code> package from <a href="https://www.nuget.org/packages/Uni.ORM/">https://www.nuget.org/packages/Uni.ORM/</a> address as shown below.</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG" alt="uniormnuget"></p>
+
+<h2>
+<a id="how-do-you-use-it" class="anchor" href="#how-do-you-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How Do You Use It?</h2>
+
+<p>Suppose you installed database connectors in your machine.
+Your project does not need any DLL in references. <code>Uni.ORM</code> will find DLL which is necessary from the GAC.</p>
+
+<h3>
+<a id="first-step" class="anchor" href="#first-step" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>First Step</h3>
+
+<p>Let's have a look at web.config or app.config file for ConnectionStrings which will be used by <code>Uni.ORM</code>.</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;?<span class="pl-ent">xml</span><span class="pl-e"> version</span>=<span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span><span class="pl-e"> encoding</span>=<span class="pl-s"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span> ?&gt;
+&lt;<span class="pl-ent">configuration</span>&gt;
+  &lt;<span class="pl-ent">connectionStrings</span>&gt;
+    &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>AdventureWorks<span class="pl-pds">"</span></span> <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True<span class="pl-pds">"</span></span> <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Data.SqlClient<span class="pl-pds">"</span></span>/&gt;
+
+    &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>HR<span class="pl-pds">"</span></span> <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR<span class="pl-pds">"</span></span> <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>Oracle.DataAccess.Client<span class="pl-pds">"</span></span>/&gt;
+
+    &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>Sakila<span class="pl-pds">"</span></span> <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;<span class="pl-pds">"</span></span> <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>MySql.Data.MySqlClient<span class="pl-pds">"</span></span>/&gt;
+
+    &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>NorthwindSqlite<span class="pl-pds">"</span></span> <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>Data Source=.\Northwind.sqlite;Version=3;<span class="pl-pds">"</span></span> <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>System.Data.Sqlite<span class="pl-pds">"</span></span>/&gt;
+
+    &lt;<span class="pl-ent">add</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>NorthwindPostgre<span class="pl-pds">"</span></span> <span class="pl-e">connectionString</span>=<span class="pl-s"><span class="pl-pds">"</span>HOST=localhost;PORT=5432;DATABASE=Northwind;USER ID=postgres;PASSWORD=123456;<span class="pl-pds">"</span></span> <span class="pl-e">providerName</span>=<span class="pl-s"><span class="pl-pds">"</span>NpgSql<span class="pl-pds">"</span></span>/&gt;
+  &lt;/<span class="pl-ent">connectionStrings</span>&gt;
+&lt;/<span class="pl-ent">configuration</span>&gt;</pre></div>
+
+<p><code>Uni.ORM</code> has the ability to understand the database you want to use with providerName attribute in connectionString. So, don't forget the providerName.
+Suppose we want to use Oracle database. The providerName must be set as "Oracle.DataAccess.Client" as shown in the below config code.</p>
+
+<h3>
+<a id="second-step" class="anchor" href="#second-step" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Second Step</h3>
+
+<p>Create UniOrm object now.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> aw = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>AdventureWorks<span class="pl-pds">"</span></span>);<span class="pl-c">//Microsoft SQL Server</span>
+
+<span class="pl-k">var</span> hr = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>HR<span class="pl-pds">"</span></span>);<span class="pl-c">//Oracle</span>
+
+<span class="pl-k">var</span> sakila = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>Sakila<span class="pl-pds">"</span></span>);<span class="pl-c">//MySQL</span>
+
+<span class="pl-k">var</span> northwindPostgre = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>NorthwindPostgre<span class="pl-pds">"</span></span>);<span class="pl-c">//PostgreSQL</span>
+
+<span class="pl-k">var</span> northwindSqlite = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>NorthwindSqlite<span class="pl-pds">"</span></span>);<span class="pl-c">//SQLite</span></pre></div>
+
+<p>Create UniOrm object with connectionString directly in case you don't want to use config file.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> aw = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">@"Data Source=localhost;Initial Catalog=AdventureWorks2012;Integrated Security=True"</span></span>, DatabaseType.SQLServer);<span class="pl-c">//Microsoft SQL Server</span>
+
+<span class="pl-k">var</span> hr = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">@"DATA SOURCE=localhost;PASSWORD=1;PERSIST SECURITY INFO=True;USER ID=HR"</span></span>, DatabaseType.Oracle);<span class="pl-c">//Oracle</span>
+
+<span class="pl-k">var</span> sakila = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">@"server=localhost;Uid=root;Pwd=1;database=sakila;Allow User Variables=true;"</span></span>, DatabaseType.MySQL);<span class="pl-c">//MySQL</span></pre></div>
+
+<p>Suppose you want to use SQLite database. Add SQLite DLL files in your project references as you don't have DLLs in your GAC. </p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> northwindSqlite = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">@"Data Source=.\Northwind.sqlite;Version=3;"</span></span>, DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);<span class="pl-c">//SQLite</span></pre></div>
+
+<h2>
+<a id="how-to-execute-a-query" class="anchor" href="#how-to-execute-a-query" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How To Execute a Query?</h2>
+
+<p>Suppose we want to Query "Product" table. All you need is to instantiate it inline.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//returns all the products</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Actually, after you write "aw.dyno" and click the point button, you will not see intellisense. Because, methods and arguments after "aw.dyno" code are on the fly. But, <code>Uni.ORM</code> is smart and dynamic. So, it will generate and execute query according to your method and parameters.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//if you want to use dynamic advantages, you should use dynamic. </span>
+<span class="pl-c">//But, if you use like that, you will lose intellisense.</span>
+dynamic aw = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>AdventureWorks<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result = aw.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//if you use as bellow, you just use dyno property without extra code</span>
+<span class="pl-k">var</span> aw = <span class="pl-k">new</span> UniOrm(<span class="pl-s"><span class="pl-pds">"</span>AdventureWorks<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//you can use intellisense here</span>
+<span class="pl-k">var</span> result = aw.Count(commandType: System.Data.CommandType.TableDirect, schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, commandText: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>You can also run classic queries.</p>
+
+<div class="highlight highlight-source-cs"><pre>IEnumerable&lt;dynamic&gt; result = aw.dyno.Query(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM [Production].[Product]<span class="pl-pds">"</span></span>);
+
+IEnumerable&lt;dynamic&gt; result = aw.dyno.Query(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Production.Product WHERE ListPrice=@0 and Name=@1<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">0</span>, <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span> });
+
+IEnumerable&lt;dynamic&gt; result = aw.dyno.Query(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Production.Product WHERE ListPrice=@ListPrice and Name=@Name<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { ListPrice = <span class="pl-c1">0</span>, Name = <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span> });
+
+IEnumerable&lt;dynamic&gt; result = aw.dyno.Query(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Production.Product WHERE ListPrice=@ListPrice and Name=@Name<span class="pl-pds">"</span></span>, ListPrice: <span class="pl-c1">0</span>, Name: <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Generated Sql: SELECT * FROM Production.Product WHERE ListPrice=@ListPrice AND Name=@Name</span>
+IEnumerable&lt;dynamic&gt; result = aw.dyno.Query(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Production.Product<span class="pl-pds">"</span></span>, ListPrice: <span class="pl-c1">0</span>, Name: <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="dynamic-object-and-strongly-typed-result" class="anchor" href="#dynamic-object-and-strongly-typed-result" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dynamic object and strongly typed result</h2>
+
+<p>Suppose you want to use <code>POCO</code> model, you can set your <code>POCO</code> type as generic in method. So, <code>Uni.ORM</code> will return strongly typed result.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">customer</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">customer_id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">store_id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">first_name</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">last_name</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">email</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">address_id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">bool</span> <span class="pl-en">active</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> DateTime <span class="pl-en">create_date</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> DateTime <span class="pl-en">last_update</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+}
+
+<span class="pl-c">//Execute and return strongly typed result</span>
+IEnumerable&lt;customer&gt; result = sakila.dyno.Query&lt;customer&gt;(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Execute and return dynamic object result</span>
+IEnumerable&lt;dynamic&gt; result = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="generating-poco-model" class="anchor" href="#generating-poco-model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generating POCO Model</h2>
+
+<p>Below is an easy way how to generate POCO Model.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//This code will return dynamic mapped result.</span>
+<span class="pl-k">var</span> result1 = oracle.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>);
+
+<span class="pl-k">var</span> anonymousObj = <span class="pl-k">new</span> UniAnonymousObject();
+
+<span class="pl-k">var</span> productType = anonymousObj.GetDynamicType(result1, <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">string</span> productPoco = anonymousObj.GetPoco(result1, <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Generated POCO class</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">PRODUCTS</span>
+{
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">PRODUCTID</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">PRODUCTNAME</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">SUPPLIERID</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">CATEGORYID</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">QUANTITYPERUNIT</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">UNITPRICE</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">UNITSINSTOCK</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">UNITSONORDER</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">REORDERLEVEL</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    <span class="pl-k">public</span> <span class="pl-k">decimal</span> <span class="pl-en">DISCONTINUED</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+}</pre></div>
+
+<p>Let's use generated POCO type.</p>
+
+<div class="highlight highlight-source-cs"><pre>IEnumerable&lt;PRODUCTS&gt; result2 = oracle.dyno.Query&lt;PRODUCTS&gt;(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="in-statement" class="anchor" href="#in-statement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IN Statement</h2>
+
+<p>You can use In statement with <code>Uni.ORM</code> simply as below;</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//This query is created by Uni.ORM</span>
+<span class="pl-c">//SELECT ProductID,Name,ProductNumber FROM [Production].[Product] WHERE Color in (@Color0,@Color1,@Color2) and Size in (@Size0,@Size1,@Size2)</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color and Size in @Size<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });</pre></div>
+
+<h2>
+<a id="limit-and-orderby" class="anchor" href="#limit-and-orderby" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LIMIT AND ORDERBY</h2>
+
+<p>Let's say we need first row of our data. We need to set "Limit" argument as 1 (Limit:1) and "OrderBy" argument as "ASC"</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>ListPrice=@ListPrice and Color in @Color<span class="pl-pds">"</span></span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>ProductID<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>, ListPrice: <span class="pl-c1">0</span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span> });</pre></div>
+
+<p>We can also take last row in same way. Just change "OrderBy" from "ASC" to "DESC" like below</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>ListPrice=@ListPrice and Color in @Color<span class="pl-pds">"</span></span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>ProductID DESC<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>, ListPrice: <span class="pl-c1">0</span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span> });</pre></div>
+
+<h2>
+<a id="paging" class="anchor" href="#paging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PAGING</h2>
+
+<p>Let's say you need paging in your application. Just use query method with extra arguments which are "PageSize" and "PageNo" as below;</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//First page 10 record</span>
+<span class="pl-k">var</span> sakilaResult4 = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>address_id<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">10</span>, PageNo: <span class="pl-c1">1</span>);
+<span class="pl-c">//Secodn page 10 record</span>
+<span class="pl-k">var</span> sakilaResult5 = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>address_id<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">10</span>, PageNo: <span class="pl-c1">2</span>);</pre></div>
+
+<p>Use RowNumberColumn for Microsoft SQL Server</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Generated Sql: SELECT TOP 50 * FROM (SELECT ROW_NUMBER() OVER (ORDER BY BusinessEntityID) AS RowNumber, * FROM (SELECT * FROM [Person].[Person]) as PagedTable) as PagedRecords WHERE RowNumber &gt; 0</span>
+<span class="pl-k">var</span> result1 = adventureWorks.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, RowNumberColumn: <span class="pl-s"><span class="pl-pds">"</span>BusinessEntityID<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">50</span>, PageNo: <span class="pl-c1">1</span>);
+
+<span class="pl-c">//Generated Sql: SELECT TOP 50 * FROM (SELECT ROW_NUMBER() OVER (ORDER BY BusinessEntityID) AS RowNumber, * FROM (SELECT * FROM [Person].[Person]) as PagedTable) as PagedRecords WHERE RowNumber &gt; 50</span>
+<span class="pl-k">var</span> result2 = adventureWorks.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, RowNumberColumn: <span class="pl-s"><span class="pl-pds">"</span>BusinessEntityID<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">50</span>, PageNo: <span class="pl-c1">2</span>);</pre></div>
+
+<p>SQLite</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Generated Sql: SELECT * FROM Products LIMIT 0,50</span>
+IEnumerable&lt;dynamic&gt; result1 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">50</span>, PageNo: <span class="pl-c1">1</span>);
+
+<span class="pl-c">//Generated Sql: SELECT * FROM Products LIMIT 50,50</span>
+IEnumerable&lt;dynamic&gt; result2 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, PageSize: <span class="pl-c1">50</span>, PageNo: <span class="pl-c1">2</span>);</pre></div>
+
+<h2>
+<a id="aggregate-operations" class="anchor" href="#aggregate-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Aggregate operations</h2>
+
+<p>You can also use aggregates. Actually, logic is the same. Just change Method name and <code>Uni.ORM</code> will do this job.
+Do not forget to set "Columns" argument for "Sum", "Max", "Min", "Avg" aggregates.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Exists and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Exists(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">//Count and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Count(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">//Sum and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Sum(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ListPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">//Max and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Max(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ListPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">//Min and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Min(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ListPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });
+
+<span class="pl-c">//Avg and In Usage</span>
+<span class="pl-k">var</span> result = aw.dyno.Avg(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ListPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Color: <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span> });</pre></div>
+
+<h2>
+<a id="some-cast-operations" class="anchor" href="#some-cast-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some Cast Operations</h2>
+
+<p>Uni.Orm has some direct cast operations which are <code>GetBool</code>, <code>GetInt</code>, <code>GetLong</code>, <code>GetDecimal</code>, <code>GetDouble</code>, <code>GetFloat</code>, <code>GetDateTime</code>, <code>GetValue</code></p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">decimal</span> result1 = adventureWorks.dyno.GetDecimal(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT AVG(ListPrice) ListPrice FROM Production.Product<span class="pl-pds">"</span></span>);
+
+OR
+
+<span class="pl-k">decimal</span> result2 = adventureWorks.dyno.Query&lt;<span class="pl-k">decimal</span>&gt;(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT AVG(ListPrice) ListPrice FROM Production.Product WHERE Name=@Name<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>, Name: <span class="pl-s"><span class="pl-pds">"</span>Sport-100 Helmet, Red<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">bool</span> result3 = adventureWorks.dyno.GetBool(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT CASE WHEN EXISTS(SELECT * FROM Production.Product) THEN 1 ELSE 0 END as RESULT<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>);
+</pre></div>
+
+<h2>
+<a id="stored-procedure-and-function" class="anchor" href="#stored-procedure-and-function" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stored Procedure and Function</h2>
+
+<p>Let's say you want to execute your stored procedure or function. Just use "SP" or "FN" arguments.
+If your stored procedure or function returns back as an output parameter, you should also use "Listener" argument so that after method is executed, you can retrieve output parameters and sql statement which is generated by <code>Uni.ORM</code></p>
+
+<p>If you need some complex stored procedure usage, <code>Uni.ORM</code> presents Listener. You can listen some events which are <code>OnCallback</code> and <code>OnParameterCreating</code>. There will be other events in the future.</p>
+
+<p><code>OnCallback</code> occurs when the result is generated.</p>
+
+<p><code>OnParameterCreating</code> occurs before the parameter is created. So, you can change parameter direction, dataType etc.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Simple usage of Stored procedure</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, Sp: <span class="pl-s"><span class="pl-pds">"</span>GetPersonList<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Stored Procedure and CallBack(You can take output parameter of SP)</span>
+
+dynamic args = <span class="pl-k">new</span> ExpandoObject();
+args.RETURN_VALUE = (<span class="pl-k">int</span>)<span class="pl-c1">0</span>;
+args.ErrorLogID = (<span class="pl-k">int</span>)<span class="pl-c1">0</span>;
+
+<span class="pl-k">var</span> listener = <span class="pl-k">new</span> Listener
+{
+    OnCallback = (Callback f) =&gt;
+    {
+        <span class="pl-c">//Callback returns back some variables.(Sql statement and Stored procedure output parameters)</span>
+        Console.WriteLine(f.SqlQuery);
+
+        args.RETURN_VALUE = f.OutputParameters.RETURN_VALUE;
+    },
+    OnParameterCreating = (DbParameter f) =&gt;
+    {
+        <span class="pl-k">if</span> (f.ParameterName == <span class="pl-s"><span class="pl-pds">"</span>ErrorLogID<span class="pl-pds">"</span></span>)
+            f.Direction = ParameterDirection.Output;
+        <span class="pl-k">else</span> <span class="pl-k">if</span> (f.ParameterName == <span class="pl-s"><span class="pl-pds">"</span>RETURN_VALUE<span class="pl-pds">"</span></span>)
+            f.Direction = ParameterDirection.ReturnValue;
+    }
+};
+
+adventureWorks.dyno.NonQuery(Sp: <span class="pl-s"><span class="pl-pds">"</span>uspLogError<span class="pl-pds">"</span></span>, Options: <span class="pl-k">new</span> Options { EventListener = listener }, Args: args);</pre></div>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Simple usage of Function</span>
+<span class="pl-k">var</span> result = crm.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>User<span class="pl-pds">"</span></span>, FN: <span class="pl-s"><span class="pl-pds">"</span>fn_GetUserByUserID<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">64</span>, <span class="pl-c1">1</span> });</pre></div>
+
+<h2>
+<a id="insert-update-delete-bulkinsert-and-bulkupdate-operations" class="anchor" href="#insert-update-delete-bulkinsert-and-bulkupdate-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Insert, Update, Delete, BulkInsert and BulkUpdate Operations</h2>
+
+<p><code>Uni.ORM</code> will generate Insert SQL query according to your object.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Insert one record</span>
+<span class="pl-k">var</span> newID = sakila.dyno.Insert(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>,
+    Args: <span class="pl-k">new</span> { first_name = <span class="pl-s"><span class="pl-pds">"</span>kenan<span class="pl-pds">"</span></span>, last_name = <span class="pl-s"><span class="pl-pds">"</span>hancer<span class="pl-pds">"</span></span>, email = <span class="pl-s"><span class="pl-pds">"</span>kenanhancer@hotmail.com<span class="pl-pds">"</span></span>, active = <span class="pl-c1">true</span>, store_id = <span class="pl-c1">1</span>, address_id = <span class="pl-c1">5</span>, create_date = DateTime.Now }
+);
+
+`Uni.ORM` will generate Delete SQL query according to parameters.
+<span class="pl-c">//Delete record which is inserted</span>
+<span class="pl-k">var</span> result = sakila.dyno.Delete(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>, Args: newID);
+
+
+<span class="pl-c">/////////////////////////////////////////////////////////////////////////////////////////////////////</span>
+<span class="pl-c">//Insert more than one record (BulkInsert)</span>
+<span class="pl-k">var</span> insertResult = sakila.dyno.Insert(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>,
+    Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { 
+                <span class="pl-k">new</span> { first_name = <span class="pl-s"><span class="pl-pds">"</span>kenan<span class="pl-pds">"</span></span>, last_name = <span class="pl-s"><span class="pl-pds">"</span>hancer<span class="pl-pds">"</span></span>, email = <span class="pl-s"><span class="pl-pds">"</span>kenanhancer@hotmail.com<span class="pl-pds">"</span></span>, active = <span class="pl-c1">true</span>, store_id = <span class="pl-c1">1</span>, address_id = <span class="pl-c1">5</span>, create_date=DateTime.Now },
+                <span class="pl-k">new</span> { first_name = <span class="pl-s"><span class="pl-pds">"</span>sinan<span class="pl-pds">"</span></span>, last_name = <span class="pl-s"><span class="pl-pds">"</span>hancer<span class="pl-pds">"</span></span>, email = <span class="pl-s"><span class="pl-pds">"</span>kenanhancer@hotmail.com<span class="pl-pds">"</span></span>, active = <span class="pl-c1">true</span>, store_id = <span class="pl-c1">1</span>, address_id = <span class="pl-c1">5</span>, create_date=DateTime.Now },
+                <span class="pl-k">new</span> { first_name = <span class="pl-s"><span class="pl-pds">"</span>kemal<span class="pl-pds">"</span></span>, last_name = <span class="pl-s"><span class="pl-pds">"</span>hancer<span class="pl-pds">"</span></span>, email = <span class="pl-s"><span class="pl-pds">"</span>kenanhancer@hotmail.com<span class="pl-pds">"</span></span>, active = <span class="pl-c1">true</span>, store_id = <span class="pl-c1">1</span>, address_id = <span class="pl-c1">5</span>, create_date=DateTime.Now }
+            }
+);
+
+<span class="pl-c">//Delete more than one record</span>
+<span class="pl-k">var</span> deleteResult = sakila.dyno.Delete(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>, Args: insertResult);
+<span class="pl-c">/////////////////////////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="pl-c">//Update one record</span>
+<span class="pl-k">var</span> updateResult = sakila.dyno.Update(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    Columns: <span class="pl-s"><span class="pl-pds">"</span>active<span class="pl-pds">"</span></span>,
+    Args: <span class="pl-k">new</span> { customer_id = <span class="pl-c1">1</span>, active = <span class="pl-c1">false</span> }
+);
+
+<span class="pl-c">//Update more than one record</span>
+<span class="pl-k">var</span> updateResult = sakila.dyno.Update(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    Columns: <span class="pl-s"><span class="pl-pds">"</span>active<span class="pl-pds">"</span></span>,
+    Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] {
+                <span class="pl-k">new</span> { customer_id = <span class="pl-c1">2</span>, active = <span class="pl-c1">false</span> },
+                <span class="pl-k">new</span> { customer_id = <span class="pl-c1">3</span>, active = <span class="pl-c1">false</span> }
+            }
+);
+
+
+<span class="pl-c">//BulkInsert</span>
+<span class="pl-c">//Below code retriews first 5 rows and updates and then insert again database.</span>
+IEnumerable&lt;dynamic&gt; result = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">5</span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>));
+result = result.ToList();
+result.ForEach(f =&gt; f.active = <span class="pl-c1">false</span>);
+
+<span class="pl-k">var</span> bulkInsertResult = sakila.dyno.Insert(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>,
+    Args: result
+);
+
+<span class="pl-c">//BulkUpdate</span>
+IEnumerable&lt;dynamic&gt; result = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">5</span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>customer_id DESC<span class="pl-pds">"</span></span>);
+result = result.ToList();
+result.ForEach(f =&gt; f.active = <span class="pl-c1">true</span>);
+
+<span class="pl-k">var</span> bulkUpdateResult = sakila.dyno.Update(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    Columns: <span class="pl-s"><span class="pl-pds">"</span>active<span class="pl-pds">"</span></span>,
+    Where: <span class="pl-s"><span class="pl-pds">"</span>address_id=@address_id AND store_id=@store_id<span class="pl-pds">"</span></span>,
+    Args: result
+);
+
+<span class="pl-k">var</span> deleteResult = sakila.dyno.Delete(
+    Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>,
+    PKField: <span class="pl-s"><span class="pl-pds">"</span>customer_id<span class="pl-pds">"</span></span>,
+    Args: result
+);</pre></div>
+
+<h2>
+<a id="listenersevents" class="anchor" href="#listenersevents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Listeners(Events)</h2>
+
+<p><code>Uni.ORM</code> supports some special events as <code>OnCallback</code>, <code>OnCommandPreExecuting</code>, <code>OnConvertingResult</code>, <code>OnParameterCreating</code>, <code>OnPreGeneratingSql</code></p>
+
+<p>Let’s say you want to convert Delete result from int to bool. Just use <code>OnConvertingResult</code> event. After executing query <code>OnCallback</code>, it wıll give you some details such as SqlQuery that is genetated by <code>Uni.Orm</code></p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> options = <span class="pl-k">new</span> Options
+{
+    EventListener = <span class="pl-k">new</span> Listener
+    {
+        OnConvertingResult = (sqlEntity, result) =&gt;
+        {
+            <span class="pl-k">if</span> (sqlEntity.Binder == <span class="pl-s"><span class="pl-pds">"</span>delete<span class="pl-pds">"</span></span>)
+                <span class="pl-k">return</span> result.To&lt;<span class="pl-k">bool</span>&gt;();
+
+            <span class="pl-k">return</span> result;
+        }
+    }
+};
+
+<span class="pl-k">bool</span> result1 = oracle.dyno.Delete(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                  PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                  Options: options,
+                                  Args: <span class="pl-c1">79</span>);</pre></div>
+
+<p>You can also set OnConvertingResult and OnCallback parameters directly.</p>
+
+<div class="highlight highlight-source-cs"><pre>Func&lt;SqlEntity, <span class="pl-k">object</span>, <span class="pl-k">object</span>&gt; onConvertingResult = (sqlEntity, result) =&gt; result.To&lt;<span class="pl-k">bool</span>&gt;();
+
+Action&lt;Callback&gt; onCallback = callback =&gt; Console.WriteLine(<span class="pl-s"><span class="pl-pds">"</span>SqlQuery is {0}<span class="pl-pds">"</span></span>, callback.SqlQuery);
+
+<span class="pl-k">bool</span> result5 = oracle.dyno.Delete(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                  PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                  OnConvertingResult: onConvertingResult,
+                                  OnCallback: onCallback,
+                                  Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">88</span>, <span class="pl-c1">89</span> });</pre></div>
+
+<h2>
+<a id="transaction" class="anchor" href="#transaction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Transaction</h2>
+
+<p><code>Uni.ORM</code> supports transaction based operations. You just need to set Options parameter as below.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> options = <span class="pl-k">new</span> Options { Transaction = oracle.NewConnection().BeginTransaction() };
+
+<span class="pl-k">var</span> result1 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Options: options,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 1<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+<span class="pl-k">var</span> result2 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Options: options,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 2<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+<span class="pl-k">var</span> result3 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Options: options,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 3<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+options.Transaction.Commit();</pre></div>
+
+<p>You can also set Trasaction parameter directly.</p>
+
+<div class="highlight highlight-source-cs"><pre>DbTransaction transaction = oracle.NewConnection().BeginTransaction();
+
+<span class="pl-k">var</span> result1 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Transaction: transaction,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 1<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+<span class="pl-k">var</span> result2 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Transaction: transaction,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 2<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+<span class="pl-k">var</span> result3 = oracle.dyno.Insert(Table: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                                PKField: <span class="pl-s"><span class="pl-pds">"</span>PRODUCTID<span class="pl-pds">"</span></span>,
+                                Sequence: <span class="pl-s"><span class="pl-pds">"</span>SC_PRODUCT<span class="pl-pds">"</span></span>,
+                                Transaction: transaction,
+                                Args: <span class="pl-k">new</span>
+                                {
+                                    PRODUCTID = <span class="pl-c1">0</span>,
+                                    PRODUCTNAME = <span class="pl-s"><span class="pl-pds">"</span>Test Product 3<span class="pl-pds">"</span></span>,
+                                    SUPPLIERID = <span class="pl-c1">12</span>,
+                                    CATEGORYID = <span class="pl-c1">2</span>,
+                                    QUANTITYPERUNIT = <span class="pl-s"><span class="pl-pds">"</span>12 boxes<span class="pl-pds">"</span></span>,
+                                    UNITPRICE = <span class="pl-c1">10</span>,
+                                    UNITSINSTOCK = <span class="pl-c1">50</span>,
+                                    DISCONTINUED = <span class="pl-c1">0</span>
+                                });
+
+transaction.Commit();</pre></div>
+
+<h2>
+<a id="config-based-query" class="anchor" href="#config-based-query" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Config Based Query</h2>
+
+<p>Let’s say you need to make a query. But, this <code>Uni.Orm</code> query parameters also should be set as a json data. So, you can make query dynamicly. :)</p>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-k">string</span> json = @<span class="pl-s"><span class="pl-pds">"</span>{</span>
+<span class="pl-s">  'Operation': 'Query',</span>
+<span class="pl-s">  'Table': 'Products',</span>
+<span class="pl-s">  'Where': 'ProductName in @ProductName',</span>
+<span class="pl-s">  'ProductName': [</span>
+<span class="pl-s">    'Chai',</span>
+<span class="pl-s">    'Chang',</span>
+<span class="pl-s">    'Aniseed Syrup',</span>
+<span class="pl-s">    'Mishi Kobe Niku',</span>
+<span class="pl-s">    'Ikura'</span>
+<span class="pl-s">  ]</span>
+<span class="pl-s">}<span class="pl-pds">"</span></span>;
+
+dynamic criteria = Newtonsoft.Json.JsonConvert.DeserializeObject&lt;ExpandoObject&gt;(json);
+
+<span class="pl-k">var</span> options = <span class="pl-k">new</span> Options();
+options.EventListener = <span class="pl-k">new</span> Listener
+{
+    OnCallback = (Callback f) =&gt;
+    {
+        Console.WriteLine(f.SqlQuery);
+    },
+    OnParameterCreating = (DbParameter f) =&gt;
+    {
+
+    }
+};
+criteria.Options = options;
+
+IEnumerable&lt;dynamic&gt; result = northwindSqlite.dyno.Execute(criteria);
+
+result = result.ToList();</pre></div>
+
+<h2>
+<a id="simple-join-groupby-and-having" class="anchor" href="#simple-join-groupby-and-having" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple Join, GroupBy and Having</h2>
+
+<p>Let’s say you want to use simple join queries. Actually, you can use the capabilities of <code>Uni.ORM</code>. 
+First of all, we must ask ourselves what join is. It is the equality of specific table columns. 
+So, we can set “Table” argument for tables we want to join so later we can set “Where” argument for columns which are equal as the following codes. 
+If we use aggregate functions such as “SUM, MAX, MIN, AVG, COUNT” and normal column together such as “sum(amount), first_name” we should set “GroupBy” argument such as “GroupBy: first_name”. 
+That is all, this is just an idea and ,it can be developed in different variations.</p>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Three tables are joined. customer and payment tables are joined with customer_id column. Later, payment and staff tables are joined with staff_id column</span>
+<span class="pl-k">var</span> result = sakila.dyno.Query(
+        Table: <span class="pl-s"><span class="pl-pds">"</span>payment as p,customer as c,staff as s<span class="pl-pds">"</span></span>, 
+        Columns: <span class="pl-s"><span class="pl-pds">"</span>p.*, CONCAT(s.first_name, ' ', s.last_name) as Staff_FullName, CONCAT(c.first_name, ' ', c.last_name) as Customer_FullName<span class="pl-pds">"</span></span>, 
+        Where: <span class="pl-s"><span class="pl-pds">"</span>p.customer_id=c.customer_id and s.staff_id=p.staff_id and p.customer_id=?customer_id<span class="pl-pds">"</span></span>, 
+        customer_id: <span class="pl-c1">1</span>);
+
+<span class="pl-c">//Get Total payment amounts which are bigger than 100 and payment counts according to customers</span>
+<span class="pl-k">var</span> result = sakila.dyno.Query(
+        Table: <span class="pl-s"><span class="pl-pds">"</span>payment p,customer c<span class="pl-pds">"</span></span>, 
+        Columns: <span class="pl-s"><span class="pl-pds">"</span>CONCAT(c.first_name, ' ', c.last_name) as Customer_FullName,SUM(p.amount) TotalPayment,COUNT(p.customer_id) PaymentCount<span class="pl-pds">"</span></span>,
+        Where: <span class="pl-s"><span class="pl-pds">"</span>p.customer_id=c.customer_id<span class="pl-pds">"</span></span>,
+        GroupBy: <span class="pl-s"><span class="pl-pds">"</span>Customer_FullName<span class="pl-pds">"</span></span>,
+        Having: <span class="pl-s"><span class="pl-pds">"</span>SUM(p.amount)&gt;100<span class="pl-pds">"</span></span>);</pre></div>
+
+<h2>
+<a id="some-example-codes" class="anchor" href="#some-example-codes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some example codes</h2>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">//Actually, you can use Uni.ORM in several ways. below four lines of code will return same result.</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Name=@0<span class="pl-pds">"</span></span>, Args: <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Name=@0<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span> });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Name=@Name<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { Name = <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span> });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Name=@Name<span class="pl-pds">"</span></span>, Name: <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Name: <span class="pl-s"><span class="pl-pds">"</span>Adjustable Race<span class="pl-pds">"</span></span>);
+
+
+<span class="pl-c">//below three lines of code will return same result.</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color=@1 and ListPrice=@0<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">0</span>, <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span> });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color=@Color and ListPrice=@ListPrice<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { ListPrice = <span class="pl-c1">0</span>, Color = <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span> });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color=@Color and ListPrice=@ListPrice<span class="pl-pds">"</span></span>, ListPrice: <span class="pl-c1">0</span>, Color: <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, ListPrice: <span class="pl-c1">0</span>, Color: <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//After this method runs, generated query will be below line. So, Uni.ORM have some standart arguments. But, others will be criteria.</span>
+<span class="pl-c">//Let's look at below SQL query "Color" and "ListPrice" arguments added as criteria.</span>
+<span class="pl-c">//SELECT ProductID,Name,ProductNumber FROM [Production].[Product] WHERE ListPrice=@ListPrice AND Color=@Color ORDER BY ProductID DESC</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, OrderBy: <span class="pl-s"><span class="pl-pds">"</span>ProductID DESC<span class="pl-pds">"</span></span>, ListPrice: <span class="pl-c1">0</span>, Color: <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Named Argument Query Syntax</span>
+<span class="pl-k">var</span> result = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, Active: <span class="pl-c1">true</span>);
+<span class="pl-k">var</span> result = sakila.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Active=?Active<span class="pl-pds">"</span></span>, Active: <span class="pl-c1">true</span>);
+
+<span class="pl-c">//Get total payment amount of customer who has value 1 of customer_id</span>
+<span class="pl-k">var</span> result = sakila.dyno.Sum(Table: <span class="pl-s"><span class="pl-pds">"</span>payment<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>amount<span class="pl-pds">"</span></span>, customer_id: <span class="pl-c1">1</span>);
+
+<span class="pl-c">//Get FullName of customers</span>
+<span class="pl-k">var</span> result = sakila.dyno.Query&lt;<span class="pl-k">string</span>&gt;(Table: <span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>CONCAT(first_name, ' ', last_name) as FullName<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Get tables of database</span>
+<span class="pl-k">var</span> tables = sakila.GetTables();
+
+<span class="pl-c">//Get columns of table</span>
+<span class="pl-k">var</span> tableColumns = sakila.GetColumns(<span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">//Below 5 rows generate same result</span>
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color and Size in @Size<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> { Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Color in @Color and Size in @Size<span class="pl-pds">"</span></span>, Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Args: <span class="pl-k">new</span> { Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });
+
+<span class="pl-k">var</span> result = aw.dyno.Query(Schema: <span class="pl-s"><span class="pl-pds">"</span>Production<span class="pl-pds">"</span></span>, Table: <span class="pl-s"><span class="pl-pds">"</span>Product<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductID,Name,ProductNumber<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Size in @Size<span class="pl-pds">"</span></span>, Color = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>Black<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Red<span class="pl-pds">"</span></span> }, Args: <span class="pl-k">new</span> { Size = <span class="pl-k">new</span>[] { <span class="pl-s"><span class="pl-pds">"</span>38<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>40<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>42<span class="pl-pds">"</span></span> } });
+
+<span class="pl-k">var</span> result1 = northwindSqlite.dyno.Count(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>ProductName<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result2 = northwindSqlite.dyno.Count(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>*<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result3 = northwindSqlite.dyno.Count(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>*<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>ProductID=@0<span class="pl-pds">"</span></span>, Args: <span class="pl-c1">1</span>);
+
+<span class="pl-k">var</span> result4 = northwindSqlite.dyno.Exists(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>ProductID IN (@0,@1)<span class="pl-pds">"</span></span>, Args: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span> });
+
+<span class="pl-k">var</span> result5 = northwindSqlite.dyno.Sum(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result6 = northwindSqlite.dyno.Max(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result7 = northwindSqlite.dyno.Min(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result8 = northwindSqlite.dyno.Avg(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result9 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Customers<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>CompanyName<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Region IS NULL<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result10 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Customers<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>CompanyName<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Region IS NULL<span class="pl-pds">"</span></span>, City: <span class="pl-s"><span class="pl-pds">"</span>London<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> result11 = northwindSqlite.dyno.Sum(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-c1">1</span>);
+
+<span class="pl-k">var</span> result12 = northwindSqlite.dyno.Sum(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>CategoryID IN @CategoryID<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span> });
+
+IEnumerable&lt;dynamic&gt; result13 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>CategoryID IN @CategoryID<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span> });
+
+result13 = result13.ToList();
+
+IEnumerable&lt;dynamic&gt; result14 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Customers<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>CompanyName<span class="pl-pds">"</span></span>, Where: <span class="pl-s"><span class="pl-pds">"</span>Region IS NULL<span class="pl-pds">"</span></span>, City: <span class="pl-s"><span class="pl-pds">"</span>London<span class="pl-pds">"</span></span>);
+
+result14 = result14.ToList();
+
+IEnumerable&lt;Products&gt; result15 = northwindSqlite.dyno.Query&lt;Products&gt;(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Products<span class="pl-pds">"</span></span>);
+
+result15 = result15.ToList();
+
+<span class="pl-k">var</span> result16 = northwindSqlite.dyno.Sum(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, Columns: <span class="pl-s"><span class="pl-pds">"</span>UnitPrice<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span> });
+
+IEnumerable&lt;dynamic&gt; result17 = northwindSqlite.dyno.Query(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span> });
+
+result17 = result17.ToList();
+
+IEnumerable&lt;Products&gt; result18 = northwindSqlite.dyno.Query&lt;Products&gt;(Table: <span class="pl-s"><span class="pl-pds">"</span>Products<span class="pl-pds">"</span></span>, CategoryID: <span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span> });
+
+result18 = result18.ToList();
+
+Products result19 = northwindSqlite.dyno.Query&lt;Products&gt;(Sql: <span class="pl-s"><span class="pl-pds">"</span>SELECT * FROM Products<span class="pl-pds">"</span></span>, Limit: <span class="pl-c1">1</span>);</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/kenanhancer/Uni.ORM/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/kenanhancer/Uni.ORM/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/kenanhancer/Uni.ORM"></a> is maintained by <a href="https://github.com/kenanhancer">kenanhancer</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
