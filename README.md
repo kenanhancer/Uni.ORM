@@ -4,10 +4,10 @@
 
 `Uni.Orm` is a simple, fast and lightweight micro ORM. It has been developed as a compact single class library enabling to do the job with minimal effort just by using a few basic methods.
 
-##Performance
+## Performance
 ![orm_comp](https://cloud.githubusercontent.com/assets/1851856/11440560/3e3438d6-950c-11e5-8a67-fa479f75a839.jpg)
 
-##How To Install It?
+## How To Install It?
 Drop `UniOrm.cs` and `UniExtensions.cs` C#.NET code files into your project and change it as you wish or install from `NuGet Galery`.
 
 If you want to install from `Nuget`, you should write Package Manager Console below code and `Uni.ORM` will be installed automatically as shown below.
@@ -20,11 +20,11 @@ By the way, you can also reach `Uni.ORM` `NuGet` package from https://www.nuget.
 
 ![uniormnuget](https://cloud.githubusercontent.com/assets/1851856/10601767/88efab66-771c-11e5-9981-291a23ff43e6.PNG)
 
-##How Do You Use It?
+## How Do You Use It?
 Suppose you installed database connectors in your machine.
 Your project does not need any DLL in references. `Uni.ORM` will find DLL which is necessary from the GAC.
 
-###First Step
+### First Step
 Let's have a look at web.config or app.config file for ConnectionStrings which will be used by `Uni.ORM`.
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -45,7 +45,7 @@ Let's have a look at web.config or app.config file for ConnectionStrings which w
 `Uni.ORM` has the ability to understand the database you want to use with providerName attribute in connectionString. So, don't forget the providerName.
 Suppose we want to use Oracle database. The providerName must be set as "Oracle.DataAccess.Client" as shown in the below config code.
 
-###Second Step
+### Second Step
 Create UniOrm object now.
 ```csharp
 var aw = new UniOrm("AdventureWorks");//Microsoft SQL Server
@@ -74,7 +74,7 @@ Suppose you want to use SQLite database. Add SQLite DLL files in your project re
 var northwindSqlite = new UniOrm(@"Data Source=.\Northwind.sqlite;Version=3;", DatabaseType.SQLite, System.Data.SQLite.SQLiteFactory.Instance);//SQLite
 ```
 
-##How To Execute a Query?
+## How To Execute a Query?
 Suppose we want to Query "Product" table. All you need is to instantiate it inline.
 ```csharp
 //returns all the products
@@ -112,7 +112,7 @@ IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Produ
 IEnumerable<dynamic> result = aw.dyno.Query(Sql: "SELECT * FROM Production.Product", ListPrice: 0, Name: "Adjustable Race");
 ```
 
-##Dynamic object and strongly typed result
+## Dynamic object and strongly typed result
 Suppose you want to use `POCO` model, you can set your `POCO` type as generic in method. So, `Uni.ORM` will return strongly typed result.
 
 ```csharp
@@ -136,7 +136,7 @@ IEnumerable<customer> result = sakila.dyno.Query<customer>(Table: "customer");
 IEnumerable<dynamic> result = sakila.dyno.Query(Table: "customer");
 ```
 
-##Generating POCO Model
+## Generating POCO Model
 Below is an easy way how to generate POCO Model.
 
 ```csharp
@@ -173,7 +173,7 @@ Let's use generated POCO type.
 IEnumerable<PRODUCTS> result2 = oracle.dyno.Query<PRODUCTS>(Table: "PRODUCTS");
 ```
 
-##IN Statement
+## IN Statement
 You can use In statement with `Uni.ORM` simply as below;
 ```csharp
 //This query is created by Uni.ORM
@@ -181,7 +181,7 @@ You can use In statement with `Uni.ORM` simply as below;
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "Color in @Color and Size in @Size", Args: new { Color = new[] { "Black", "Yellow", "Red" }, Size = new[] { "38", "40", "42" } });
 ```
 
-##LIMIT AND ORDERBY
+## LIMIT AND ORDERBY
 Let's say we need first row of our data. We need to set "Limit" argument as 1 (Limit:1) and "OrderBy" argument as "ASC"
 ```csharp
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "ListPrice=@ListPrice and Color in @Color", OrderBy: "ProductID", Limit: 1, ListPrice: 0, Color: new[] { "Red", "Black" });
@@ -191,7 +191,7 @@ We can also take last row in same way. Just change "OrderBy" from "ASC" to "DESC
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Columns: "ProductID,Name,ProductNumber", Where: "ListPrice=@ListPrice and Color in @Color", OrderBy: "ProductID DESC", Limit: 1, ListPrice: 0, Color: new[] { "Red", "Black" });
 ```
 
-##PAGING
+## PAGING
 Let's say you need paging in your application. Just use query method with extra arguments which are "PageSize" and "PageNo" as below;
 ```csharp
 //First page 10 record
@@ -218,7 +218,7 @@ IEnumerable<dynamic> result1 = northwindSqlite.dyno.Query(Table: "Products", Pag
 IEnumerable<dynamic> result2 = northwindSqlite.dyno.Query(Table: "Products", PageSize: 50, PageNo: 2);
 ```
 
-##Aggregate operations
+## Aggregate operations
 You can also use aggregates. Actually, logic is the same. Just change Method name and `Uni.ORM` will do this job.
 Do not forget to set "Columns" argument for "Sum", "Max", "Min", "Avg" aggregates.
 ```csharp
@@ -241,7 +241,7 @@ var result = aw.dyno.Min(Schema: "Production", Table: "Product", Columns: "ListP
 var result = aw.dyno.Avg(Schema: "Production", Table: "Product", Columns: "ListPrice", Where: "Color in @Color", Color: new[] { "Black", "Yellow" });
 ```
 
-##Some Cast Operations
+## Some Cast Operations
 Uni.Orm has some direct cast operations which are `GetBool`, `GetInt`, `GetLong`, `GetDecimal`, `GetDouble`, `GetFloat`, `GetDateTime`, `GetValue`
 
 ```csharp
@@ -255,7 +255,7 @@ bool result3 = adventureWorks.dyno.GetBool(Sql: "SELECT CASE WHEN EXISTS(SELECT 
 
 ```
 
-##Stored Procedure and Function
+## Stored Procedure and Function
 Let's say you want to execute your stored procedure or function. Just use "SP" or "FN" arguments.
 If your stored procedure or function returns back as an output parameter, you should also use "Listener" argument so that after method is executed, you can retrieve output parameters and sql statement which is generated by `Uni.ORM`
 
@@ -300,7 +300,7 @@ adventureWorks.dyno.NonQuery(Sp: "uspLogError", Options: new Options { EventList
 //Simple usage of Function
 var result = crm.dyno.Query(Schema: "User", FN: "fn_GetUserByUserID", Args: new object[] { 64, 1 });
 ```
-##Insert, Update, Delete, BulkInsert and BulkUpdate Operations
+## Insert, Update, Delete, BulkInsert and BulkUpdate Operations
 `Uni.ORM` will generate Insert SQL query according to your object.
 
 ```csharp
@@ -381,7 +381,7 @@ var deleteResult = sakila.dyno.Delete(
 );
 ```
 
-##Listeners(Events)
+## Listeners(Events)
 `Uni.ORM` supports some special events as `OnCallback`, `OnCommandPreExecuting`, `OnConvertingResult`, `OnParameterCreating`, `OnPreGeneratingSql`
 
 Let’s say you want to convert Delete result from int to bool. Just use `OnConvertingResult` event. After executing query `OnCallback`, it wıll give you some details such as SqlQuery that is genetated by `Uni.Orm`
@@ -421,7 +421,7 @@ bool result5 = oracle.dyno.Delete(Table: "PRODUCTS",
 ```
 
 
-##Transaction
+## Transaction
 `Uni.ORM` supports transaction based operations. You just need to set Options parameter as below.
 
 ```csharp
@@ -534,7 +534,7 @@ var result3 = oracle.dyno.Insert(Table: "PRODUCTS",
 transaction.Commit();
 ```
 
-##Config Based Query
+## Config Based Query
 Let’s say you need to make a query. But, this `Uni.Orm` query parameters also should be set as a json data. So, you can make query dynamicly. :)
 
 ```csharp
@@ -573,7 +573,7 @@ IEnumerable<dynamic> result = northwindSqlite.dyno.Execute(criteria);
 result = result.ToList();
 ```
 
-##Simple Join, GroupBy and Having
+## Simple Join, GroupBy and Having
 Let’s say you want to use simple join queries. Actually, you can use the capabilities of `Uni.ORM`. 
 First of all, we must ask ourselves what join is. It is the equality of specific table columns. 
 So, we can set “Table” argument for tables we want to join so later we can set “Where” argument for columns which are equal as the following codes. 
@@ -597,7 +597,7 @@ var result = sakila.dyno.Query(
         Having: "SUM(p.amount)>100");
 ```
 
-##Some example codes
+## Some example codes
 ```csharp
 //Actually, you can use Uni.ORM in several ways. below four lines of code will return same result.
 var result = aw.dyno.Query(Schema: "Production", Table: "Product", Where: "Name=@0", Args: "Adjustable Race");
